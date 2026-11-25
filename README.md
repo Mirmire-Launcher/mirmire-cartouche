@@ -5,9 +5,14 @@
   </picture>
 </p>
 
-# Mirmire Cartouche
+<table align="center">
+<tr>
+<td align="center"><img src="docs/mirmire/icon.png" width="120" alt="The Mirmire Cartouche app icon"><br><b>Mirmire Cartouche</b></td>
+<td align="center"><img src="app/icons/main_192.png" width="120" alt="The Cartouche app icon"><br><b><a href="https://github.com/Hakimba/cartouche">Cartouche</a></b><br>by Hakimba</td>
+</tr>
+</table>
 
-<img src="docs/mirmire/icon.png" width="96" align="right" alt="The Mirmire Cartouche app icon">
+# Mirmire Cartouche
 
 The 3D Big Picture mode of [Mirmire](https://github.com/Mirmire-Launcher), the handheld launcher: your consoles as
 3D models, your games as their real discs, cartridges and UMDs, and a 3D home to get to all of it.
