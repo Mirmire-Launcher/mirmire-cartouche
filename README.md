@@ -1,13 +1,8 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/mirmire/logo-on-dark.png">
-    <img src="docs/mirmire/logo-on-light.png" width="520" alt="Mirmire × Cartouche">
-  </picture>
-</p>
+<p align="center"><img src="docs/mirmire/banner.png" width="640" alt="Mirmire × Cartouche"></p>
 
 <table align="center">
 <tr>
-<td align="center"><img src="docs/mirmire/icon.png" width="120" alt="The Mirmire Cartouche app icon"><br><b>Mirmire Cartouche</b></td>
+<td align="center"><img src="docs/mirmire/mirmire-icon.png" width="120" alt="The Mirmire logo"><br><b><a href="https://github.com/Mirmire-Launcher">Mirmire</a></b></td>
 <td align="center"><img src="app/icons/main_192.png" width="120" alt="The Cartouche app icon"><br><b><a href="https://github.com/Hakimba/cartouche">Cartouche</a></b><br>by Hakimba</td>
 </tr>
 </table>
@@ -25,12 +20,35 @@ The 3D Big Picture mode of [Mirmire](https://github.com/Mirmire-Launcher), the h
 
 <p align="center"><img src="docs/mirmire/home-consoles.webp" width="720" alt="Mirmire Cartouche's home: the Consoles card, a PlayStation controller, between the robot of Continue and the cartridges of All games"></p>
 
-## What it does
+## The home
+
+Mirmire's Big Picture, in 3D: each card a model that floats when chosen, plays its own animation and turns under
+your finger. The bottom bar has the button hints, the Mirmire × Cartouche logo and your RetroAchievements.
 
 <table>
 <tr>
-<td width="50%"><img src="docs/mirmire/home-continue.webp" width="400" alt="The Continue card: an animated robot, Halo - Combat Evolved to continue"><br><b>A 3D home:</b> Widgets, Continue, Consoles, All games, Recent, Favorites, Apps, Settings and Exit, each a 3D model. The one in the middle floats, plays its animation, and turns under your finger.</td>
-<td width="50%"><img src="docs/mirmire/consoles.webp" width="400" alt="The consoles screen: an Xbox 360 above the rail of Mirmire's consoles"><br><b>Your consoles:</b> every console in your Mirmire library, as a 3D model where there is one, and as a styled console with its name otherwise.</td>
+<td width="33%"><img src="docs/mirmire/home-widgets.webp" width="260" alt="Widgets: a toy desktop"><br><b>Widgets</b>: your Mirmire home page</td>
+<td width="33%"><img src="docs/mirmire/home-continue.webp" width="260" alt="Continue: an animated robot"><br><b>Continue</b>: plays your last game</td>
+<td width="33%"><img src="docs/mirmire/home-consoles.webp" width="260" alt="Consoles: a PlayStation controller"><br><b>Consoles</b>: into the 3D shelves</td>
+</tr>
+<tr>
+<td width="33%"><img src="docs/mirmire/home-all-games.webp" width="260" alt="All games: a pile of cartridges"><br><b>All games</b></td>
+<td width="33%"><img src="docs/mirmire/home-recent.webp" width="260" alt="Recent: an animated steampunk clock"><br><b>Recent</b></td>
+<td width="33%"><img src="docs/mirmire/home-favorites.webp" width="260" alt="Favorites: a heart in a glass ball"><br><b>Favorites</b></td>
+</tr>
+<tr>
+<td width="33%"><img src="docs/mirmire/home-apps.webp" width="260" alt="Apps: an old mobile phone"><br><b>Apps</b></td>
+<td width="33%"><img src="docs/mirmire/home-settings.webp" width="260" alt="Settings: a copper gear"><br><b>Settings</b>: Mirmire's settings</td>
+<td width="33%"><img src="docs/mirmire/home-exit.webp" width="260" alt="Exit Big Picture: an exit sign"><br><b>Exit Big Picture</b>: back to Mirmire</td>
+</tr>
+</table>
+
+## Your consoles and games
+
+<table>
+<tr>
+<td width="50%"><img src="docs/mirmire/consoles.webp" width="400" alt="The consoles screen: an Xbox 360 above the rail of Mirmire's consoles"><br><b>Your consoles:</b> every console in your Mirmire library, a 3D model where there is one, a styled console with its name otherwise.</td>
+<td width="50%"><img src="docs/mirmire/console-wiiu.webp" width="400" alt="The Wii U on the consoles screen"><br><b>More consoles:</b> Wii U, PS3, Saturn, 3DS XL, Steam Deck, Atari 2600 and Lynx, Neo Geo Pocket and more.</td>
 </tr>
 <tr>
 <td><img src="docs/mirmire/shelf-n64.webp" width="400" alt="The Nintendo 64 shelf: Gauntlet Legends, FIFA 64 and Goemon on their cartridges"><br><b>Your games, with their art:</b> Mirmire's box art and disc scans become the labels on each cartridge and disc.</td>
@@ -38,7 +56,16 @@ The 3D Big Picture mode of [Mirmire](https://github.com/Mirmire-Launcher), the h
 </tr>
 <tr>
 <td><img src="docs/mirmire/shelf-psp.webp" width="400" alt="The PSP shelf: games on UMDs"><br><b>More media:</b> PSP games on UMDs, alongside Cartouche's discs and cartridges.</td>
-<td><img src="docs/mirmire/home-recent.webp" width="400" alt="The Recent card, an animated steampunk clock, and the bottom bar with RetroAchievements"><br><b>Mirmire around it:</b> your RetroAchievements, the Mirmire × Cartouche logo, and Widgets, Recent, Favorites, Apps and Settings opening in Mirmire.</td>
+<td></td>
+</tr>
+</table>
+
+## In Mirmire
+
+<table>
+<tr>
+<td width="50%"><img src="docs/mirmire/mirmire-big-picture-style.webp" width="400" alt="Mirmire's Settings › Layout: Big Picture style, Mirmire or Cartouche 3D, and the Built on Cartouche credit"><br><b>Big Picture style:</b> Mirmire's own, or Cartouche 3D, with the credit to Cartouche.</td>
+<td width="50%"><img src="docs/mirmire/mirmire-plugins.webp" width="400" alt="Mirmire's Settings › Plugins: Mirmire Cartouche installed, Use as Big Picture"><br><b>Settings › Plugins:</b> install, open or remove Mirmire Cartouche, and use it as Big Picture.</td>
 </tr>
 </table>
 
