@@ -69,11 +69,22 @@ var _bar: Control
 var _clock: StudioPill
 var _battery: BatteryChip
 var _avatar: Texture2D
+## The loading screen over everything while the app starts, as Godot's splash left it: Mirmire's navy, the
+## Mirmire × Cartouche logo and a bar sweeping under it; it fades once the home draws smoothly.
+var _loading: CanvasLayer
+var _loading_bar: Control
+var _loading_s := 0.0
+var _smooth_frames := 0
+const _LOADING_NAVY := Color(0.0627, 0.1059, 0.2)
+const _LOADING_MAX_S := 4.0
 ## A finger down on the row: where it went down, the row's place then, and whether it has moved far enough to be a
 ## swipe; -1 for none.
 var _finger_x := -1.0
 var _finger_scroll := 0.0
 var _finger_down := Vector2.ZERO
+## When the home last opened; a Back this soon after is the one that opened it.
+var _opened_ms := 0
+const _BACK_AFTER_OPEN_MS := 700
 var _swiping := false
 var _swipe_speed := 0.0
 ## A finger turning the chosen model, as a model viewer does: whether it went down on the model, whether it is turning
@@ -120,20 +131,85 @@ func _ready() -> void:
 	_root.gui_input.connect(_on_touch)
 	visible = false
 	set_process(false)
+	_show_loading()
 
 
 ## Shows the home, its counts, game to continue and trophies read again from Mirmire.
-func open() -> void:
+## Shows the home; [param first], on its first card (back from the consoles).
+func open(first := false) -> void:
 	_home = android.mirmire_home() if android else {}
 	var ra: Dictionary = _home.get("achievements", {})
 	_avatar = _texture(str(ra.get("avatar", "")))
 	_build_cards()
+	if first:
+		_index = 0
+		_scroll = 0.0
+		_play_chosen()
 	visible = true
 	set_process(true)
 	_texts.queue_redraw()
 	_bar.queue_redraw()
 	_clock.text = Time.get_time_string_from_system().left(5)
+	# From here, not from the start: reading Mirmire's library takes a moment, and the press may come after it.
+	_opened_ms = Time.get_ticks_msec()
 	Diagnostics.trace("home", "open: %d cards, continue %s" % [_cards.size(), _home.has("continue")])
+
+
+## Shows the loading screen, on its own layer above the app, from the first frame on.
+func _show_loading() -> void:
+	_loading = CanvasLayer.new()
+	_loading.layer = 100
+	var back := ColorRect.new()
+	back.color = _LOADING_NAVY
+	back.set_anchors_preset(Control.PRESET_FULL_RECT)
+	back.mouse_filter = Control.MOUSE_FILTER_STOP
+	_loading.add_child(back)
+	var logo := TextureRect.new()
+	logo.texture = _BAR_ON_DARK
+	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	logo.set_anchors_preset(Control.PRESET_CENTER)
+	logo.custom_minimum_size = Vector2(560, 84)
+	logo.size = logo.custom_minimum_size
+	logo.position = -logo.size / 2.0
+	logo.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	logo.grow_vertical = Control.GROW_DIRECTION_BOTH
+	back.add_child(logo)
+	_loading_bar = Control.new()
+	_loading_bar.set_anchors_preset(Control.PRESET_CENTER)
+	_loading_bar.size = Vector2(240, 6)
+	_loading_bar.position = Vector2(-120, 84)
+	_loading_bar.draw.connect(_draw_loading_bar)
+	back.add_child(_loading_bar)
+	add_child(_loading)
+	set_process(true)
+
+
+## A short gold bar sweeping across a dim track, as Mirmire's own loading shows.
+func _draw_loading_bar() -> void:
+	var track := Rect2(Vector2.ZERO, _loading_bar.size)
+	_loading_bar.draw_rect(track, Color(1, 1, 1, 0.12))
+	var t := fposmod(_loading_s * 0.9, 1.0)
+	var width := track.size.x * 0.35
+	var x := lerpf(-width, track.size.x, t)
+	var from := maxf(0.0, x)
+	var to := minf(track.size.x, x + width)
+	if to > from:
+		_loading_bar.draw_rect(Rect2(from, 0, to - from, track.size.y), Color(1.0, 0.72, 0.3))
+
+
+## Moves the bar, and once the home has drawn a few smooth frames (or after a while), fades the loading screen out.
+func _tick_loading(delta: float) -> void:
+	_loading_s += delta
+	_loading_bar.queue_redraw()
+	_smooth_frames = _smooth_frames + 1 if visible and delta < 0.05 else 0
+	if _smooth_frames < 8 and _loading_s < _LOADING_MAX_S:
+		return
+	var shown := _loading
+	_loading = null
+	var fade := create_tween()
+	fade.tween_property(shown.get_child(0), ^"modulate:a", 0.0, 0.35)
+	fade.tween_callback(shown.queue_free)
 
 
 func is_open() -> bool:
@@ -141,6 +217,10 @@ func is_open() -> bool:
 
 
 func _process(delta: float) -> void:
+	if _loading:
+		_tick_loading(delta)
+		if not visible:
+			return
 	_time += delta
 	# A finger swiping holds the row where it puts it; then it settles on the card chosen.
 	if not _swiping:
@@ -182,6 +262,8 @@ func _input(event: InputEvent) -> void:
 		_step(1)
 	elif event.is_action_pressed(&"ui_accept"):
 		_choose(_cards[_index].key)
+	elif event.is_action_pressed(&"screen_back") and Time.get_ticks_msec() - _opened_ms < _BACK_AFTER_OPEN_MS:
+		pass # The Back that brought the home back (Android sends it twice), not one of its own.
 	elif event.is_action_pressed(&"screen_back"):
 		# Back (B, or Android's swipe from the edge) goes to Exit first; Back there leaves, so a stray swipe never does.
 		if _cards[_index].key == &"exit":
@@ -283,7 +365,8 @@ func _choose(key: StringName) -> void:
 			if game.has("game"):
 				android.play_in_mirmire(str(game.game))
 		&"exit":
-			android.back_to_mirmire()
+			# Big Picture is over: the app closes rather than waiting behind Mirmire with its 3D in memory.
+			android.exit_to_mirmire()
 		&"settings", &"widgets", &"all", &"recent", &"favorites", &"apps":
 			android.open_in_mirmire(String(key))
 		&"achievements":

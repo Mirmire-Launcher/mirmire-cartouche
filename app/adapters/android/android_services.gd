@@ -186,6 +186,14 @@ func mirmire_home() -> Dictionary:
 	return _object(_query(&"mirmireHome", []))
 
 
+## Closes the app and goes back to Mirmire, leaving Big Picture: the home's Exit. Godot quits at once, while still in
+## front (in the background its loop is held back): it ends the frame, stops its renderer in order and closes the
+## window, and Mirmire shows again. The plugin then takes the app out of the recent apps.
+func exit_to_mirmire() -> void:
+	_query(&"exitToMirmire", [])
+	(Engine.get_main_loop() as SceneTree).quit()
+
+
 ## Opens one of Mirmire's screens over Big Picture: settings, achievements, widgets, all, recent, favorites or apps.
 ## Leaving it comes back to the app.
 func open_in_mirmire(screen: String) -> void:

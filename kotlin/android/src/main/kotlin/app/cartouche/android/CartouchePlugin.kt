@@ -177,6 +177,7 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
     ).map { SignalInfo(it, String::class.java) }.toSet()
 
     override fun onMainResume() {
+        inRecents(true)
         resumed = true
         installed.clear()
         curtain.lower()
@@ -196,6 +197,20 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
         curtain.lower()
         if (artService.isInitialized()) art.close()
         scope.cancel()
+    }
+
+    /** Hides the app's card from the recent apps, or shows it again. */
+    private fun inRecents(shown: Boolean) {
+        runCatching { context.getSystemService(android.app.ActivityManager::class.java).appTasks.forEach { it.setExcludeFromRecents(!shown) } }
+    }
+
+    /**
+     * The home's Exit, just before Godot quits (GDScript). Godot's quit ends the process before it can take its card
+     * out of the recent apps, so the card is hidden here; the app shows it again when it next starts ([onMainResume]).
+     */
+    @UsedByGodot
+    public fun exitToMirmire() {
+        inRecents(false)
     }
 
     /**

@@ -457,7 +457,7 @@ func _handle_input(event: InputEvent, moved: bool) -> void:
 		get_viewport().set_input_as_handled()
 		# Mirmire Cartouche: back to its home, whose Exit goes back to Mirmire.
 		if _mirmire_home:
-			_mirmire_home.open()
+			_mirmire_home.open(true)
 		else:
 			android.back_to_mirmire()
 		return

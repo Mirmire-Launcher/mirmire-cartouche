@@ -10,8 +10,10 @@ config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 config/quit_on_go_back=false
 run/low_processor_mode_sleep_usec=33333
-boot_splash/show_image=false
-boot_splash/bg_color=Color(0.114, 0.122, 0.141, 1)
+boot_splash/bg_color=Color(0.0627, 0.1059, 0.2, 1)
+boot_splash/image="res://mirmire/branding/bar_on_dark.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=true
 
 [audio]
 
