@@ -111,6 +111,8 @@ Cartouche's own Godot Android template: Godot 4.7.2 plus six small patches, buil
 `scripts/godot_template.sh build` and cached. Without it the export uses Godot's official template: the same app,
 heavier ([docs/README.md](docs/README.md#the-engine-template)).
 
+Releases are built and published by GitHub Actions when a version tag is pushed: [docs/mirmire-releasing.md](docs/mirmire-releasing.md).
+
 Mirmire Cartouche shows the home only when Mirmire opens it; debug builds show it without Mirmire with
 `-- --home=mirmire`.
 
