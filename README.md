@@ -1,4 +1,9 @@
-<p align="center"><img src="docs/mirmire/banner.png" width="640" alt="Mirmire × Cartouche"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/mirmire/logo-on-dark.png">
+    <img src="docs/mirmire/logo-on-light.png" width="520" alt="Mirmire × Cartouche">
+  </picture>
+</p>
 
 <table align="center">
 <tr>
