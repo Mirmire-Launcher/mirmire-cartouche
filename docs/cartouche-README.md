@@ -1,0 +1,105 @@
+<!-- Cartouche's own README, as it was when Mirmire Cartouche was forked from it; kept for reference. -->
+
+# Cartouche
+
+A game launcher for Android handhelds that shows your games as physical discs and cartridges.
+Cartouche does not emulate anything itself: it finds your games, recognises them, and starts them
+in the emulators you already have. It is free and open source, and meant to stay easy to get into:
+use it, contribute to it, or fork it and make it yours.
+
+<p align="center"><img src="media/hero.webp" width="640" alt="The consoles ring turns to the PlayStation 2, its games come in on their discs, and Final Fantasy X goes into the console"></p>
+
+## What it does
+
+<table>
+<tr>
+<td width="50%"><img src="media/launches.webp" width="360" alt="Launches into a NES, a GameCube and a Game Boy Advance SP"><br><b>Immersion first:</b> a launch made for each console.</td>
+<td width="50%"><img src="media/variant.webp" width="360" alt="The PlayStation 2 switched from its slim model to the fat one"><br><b>Each model of it:</b> a PlayStation 2 slim or fat, a Game Boy Advance original or SP.</td>
+</tr>
+<tr>
+<td><img src="media/labels.webp" width="360" alt="Super Metroid's label chooser going through the regions' scans"><br><b>Smart labels:</b> each game recognised from its own file, its real label from ScreenScraper and LaunchBox, your region first; another region or your own picture one menu away.</td>
+<td><img src="media/filter.webp" width="360" alt="Typing F then I on the search ribbon keeps the matching PlayStation 2 games"><br><b>Your library:</b> filter by name or by region, rename a game or a console.</td>
+</tr>
+<tr>
+<td><img src="media/arrange.webp" width="360" alt="The consoles wheel: the PlayStation 2 taken and put down elsewhere"><br><b>Your order:</b> put your consoles where you like on a wheel.</td>
+<td><img src="media/add.webp" width="360" alt="Adding the GameCube with the pad, then it lands on the ring"><br><b>Controller first:</b> everything with the pad, from the first launch to adding a console; touch works too.</td>
+</tr>
+</table>
+
+- **Uses your emulators.** It finds the emulators you installed and starts each game in the right one.
+- **Speaks your language.** English, Français, Deutsch, Español, Italiano, Português (Portugal), Português (Brasil)
+  and 日本語. It follows your device's language, English otherwise; **Language** in the settings picks another.
+- **Light on your device.** On a Snapdragon 8 Gen 2 handheld the games screen holds about 200 MB of graphics
+  memory, a third of what version 0.4.1 took, and the download is 85 MB instead of 110 MB. Left alone, the app stops
+  drawing everything but the background's moving veil, which the settings switch off. The games row costs the
+  same with thousands of games as with a few.
+
+## Consoles
+
+Nineteen consoles, each a 3D model of the real one. Twelve are ready to play; the PSP, PS Vita, DS Lite, Switch, Master
+System, Mega Drive and Dreamcast are shown greyed as coming soon until their launch is made.
+
+| Maker | Consoles |
+|---|---|
+| Nintendo | NES · Super Nintendo · Nintendo 64 · GameCube · Wii · Switch (neon or grey) · Game Boy · Game Boy Color · Game Boy Advance (original or SP) · DS Lite |
+| Sony | PlayStation · PlayStation 2 (slim or fat) · PSP · PS Vita |
+| Sega | Master System · Mega Drive (model 1 or 2) · Dreamcast |
+| Microsoft | Xbox · Xbox 360 |
+
+## Install
+
+Download the APK from this repository's Releases page and install it on your handheld. You need Android 11 or
+later on an arm64 device with Vulkan, and the emulators of the consoles you want to play.
+
+## How a label is found
+
+1. **Which game.** Cartouche reads the file itself (a cartridge's CRC32, a disc's serial) and looks it up in the
+   No-Intro and Redump lists; when the file says nothing, its name decides.
+2. **Which images.** LaunchBox's scans, found by the game's name; ScreenScraper's images, found in a table shipped
+   with the app (`app/data/screenscraper/`), so the device never asks ScreenScraper which game a file is and only
+   downloads images; for PS2 discs, psxdatacenter's scans, by serial.
+3. **Which one first.** An image of the game's region (its country, or the zone containing it: France → Europe):
+   on a cartridge ScreenScraper's, then LaunchBox's; on a disc LaunchBox's, then ScreenScraper's, then
+   psxdatacenter's. Then every other image, closest region first. The first that downloads is kept.
+4. **Yours stays.** A label you chose, or a picture of your own, is never replaced. A game's properties list every
+   image of every source. When ScreenScraper cannot answer, the next image is taken and ScreenScraper is tried again
+   at a later scan.
+
+## Contributing
+
+Ideas, feedback and pull requests are welcome; open an issue to talk about a bigger change first. Help is most
+wanted on:
+
+- **3D models** of the consoles and their discs and cartridges: closer to the real thing, lighter to draw.
+- **A music theme** for the menus.
+- **New consoles** ([docs/adding-a-console.md](adding-a-console.md)).
+- **Translations:** a native reader for Japanese and Portuguese, or a new language
+  ([docs/translating.md](translating.md)).
+- **Integrations** such as RetroAchievements or RomM.
+
+[CONTRIBUTING.md](../CONTRIBUTING.md) says how to build, check and send a change; [docs/README.md](README.md)
+maps the code and has one short guide per kind of addition.
+
+## Building
+
+```sh
+export JAVA_HOME=/path/to/jdk-17 ANDROID_HOME=/path/to/android-sdk GODOT=/path/to/godot
+scripts/build.sh                # every check and test, then the debug APK in build/
+scripts/build.sh --install      # the same, then installs and starts it on the connected device
+```
+
+You need Godot 4.7.2 with its export templates, JDK 17, the Android SDK, Python 3 and gdtoolkit 4; the exact
+versions are in [CONTRIBUTING.md](../CONTRIBUTING.md#build-and-check). Releases are exported with
+Cartouche's own Godot Android template: Godot 4.7.2 plus six small patches, built once with
+`scripts/godot_template.sh build` and cached. Without it the export uses Godot's official template: the same app,
+heavier ([docs/README.md](README.md#the-engine-template)).
+
+## Stack
+
+- **Android only**, from Android 11 (API 30) to Android 16 (API 36), arm64 with Vulkan. On a desktop the Godot
+  project runs on a demo library, to work on the screens without a device.
+- **App:** [Godot](https://godotengine.org) 4.7.2 (GDScript, Mobile renderer).
+- **Domain and Android plugin:** Kotlin 2.1.21 with [Arrow](https://arrow-kt.io) 2.1.2, kotlinx.serialization 1.8.1
+  and kotlinx.coroutines 1.10.2; Gradle 8.11.1, Android Gradle Plugin 8.6.1, JDK 17.
+- **Tests:** [Kotest](https://kotest.io) 5.9.1, [Robolectric](https://robolectric.org) 4.16.1,
+  [GdUnit4](https://github.com/MikeSchulze/gdUnit4) 6.2.1, ktlint.

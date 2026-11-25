@@ -1,131 +1,86 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/mirmire/logo-on-dark.png">
+    <img src="docs/mirmire/logo-on-light.png" width="520" alt="Mirmire × Cartouche">
+  </picture>
+</p>
+
 # Mirmire Cartouche
 
-A 3D console shelf for [Mirmire](https://github.com/Mirmire-Launcher), the handheld launcher: your consoles as 3D
-models, your games as discs and cartridges. Mirmire installs and opens it from Settings › Plugins, and can start straight into it.
+<img src="docs/mirmire/icon.png" width="96" align="right" alt="The Mirmire Cartouche app icon">
 
-**Based on [Cartouche](https://github.com/Hakimba/cartouche)** by Hakimba and its contributors, under the GNU GPL
-v3 or later. Mirmire Cartouche is a modified version, released under the same licence ([LICENSE](LICENSE)). What it
-changes:
+The 3D Big Picture mode of [Mirmire](https://github.com/Mirmire-Launcher), the handheld launcher: your consoles as
+3D models, your games as their real discs, cartridges and UMDs, and a 3D home to get to all of it.
 
-- Mirmire's colour themes as backgrounds: Mirmire, Blue Console, Green Console, Pearl Console and Comic
-  (`tools/mirmire_schemes.py` generates them in `app/studio/studio_tokens.gd`).
-- Mirmire opens it with the background matching its own theme (the `com.mirmire.extra.BACKDROP` extra).
-- Its own name and package (`com.mirmire.cartouche`), so it installs next to Cartouche; it is not offered as a home
-  screen, Mirmire being the launcher.
-- Builds with Java 21.
+> **Mirmire Cartouche is a fork of [Cartouche](https://github.com/Hakimba/cartouche) by Hakimba and its
+> contributors**, the game launcher that shows games as physical discs and cartridges. Its 3D shelves, consoles,
+> launches and label artwork are Cartouche's work. Mirmire Cartouche connects them to Mirmire and adds a home around
+> them. It is released under the same licence, the GNU GPL v3 or later ([LICENSE](LICENSE)). Cartouche's own README
+> is kept in [docs/cartouche-README.md](docs/cartouche-README.md).
 
-The 3D models keep their own licences (CC-BY-4.0 and others), next to each model and credited below. Everything
-from here down is Cartouche's own README.
-
----
-
-# Cartouche
-
-A game launcher for Android handhelds that shows your games as physical discs and cartridges.
-Cartouche does not emulate anything itself: it finds your games, recognises them, and starts them
-in the emulators you already have. It is free and open source, and meant to stay easy to get into:
-use it, contribute to it, or fork it and make it yours.
-
-<p align="center"><img src="docs/media/hero.webp" width="640" alt="The consoles ring turns to the PlayStation 2, its games come in on their discs, and Final Fantasy X goes into the console"></p>
+<p align="center"><img src="docs/mirmire/home-consoles.webp" width="720" alt="Mirmire Cartouche's home: the Consoles card, a PlayStation controller, between the robot of Continue and the cartridges of All games"></p>
 
 ## What it does
 
 <table>
 <tr>
-<td width="50%"><img src="docs/media/launches.webp" width="360" alt="Launches into a NES, a GameCube and a Game Boy Advance SP"><br><b>Immersion first:</b> a launch made for each console.</td>
-<td width="50%"><img src="docs/media/variant.webp" width="360" alt="The PlayStation 2 switched from its slim model to the fat one"><br><b>Each model of it:</b> a PlayStation 2 slim or fat, a Game Boy Advance original or SP.</td>
+<td width="50%"><img src="docs/mirmire/home-continue.webp" width="400" alt="The Continue card: an animated robot, Halo - Combat Evolved to continue"><br><b>A 3D home:</b> Widgets, Continue, Consoles, All games, Recent, Favorites, Apps, Settings and Exit, each a 3D model. The one in the middle floats, plays its animation, and turns under your finger.</td>
+<td width="50%"><img src="docs/mirmire/consoles.webp" width="400" alt="The consoles screen: an Xbox 360 above the rail of Mirmire's consoles"><br><b>Your consoles:</b> every console in your Mirmire library, as a 3D model where there is one, and as a styled console with its name otherwise.</td>
 </tr>
 <tr>
-<td><img src="docs/media/labels.webp" width="360" alt="Super Metroid's label chooser going through the regions' scans"><br><b>Smart labels:</b> each game recognised from its own file, its real label from ScreenScraper and LaunchBox, your region first; another region or your own picture one menu away.</td>
-<td><img src="docs/media/filter.webp" width="360" alt="Typing F then I on the search ribbon keeps the matching PlayStation 2 games"><br><b>Your library:</b> filter by name or by region, rename a game or a console.</td>
+<td><img src="docs/mirmire/shelf-n64.webp" width="400" alt="The Nintendo 64 shelf: Gauntlet Legends, FIFA 64 and Goemon on their cartridges"><br><b>Your games, with their art:</b> Mirmire's box art and disc scans become the labels on each cartridge and disc.</td>
+<td><img src="docs/mirmire/shelf-xbox.webp" width="400" alt="Halo - Combat Evolved on its Xbox disc"><br><b>Played by Mirmire:</b> tap a game, or press A, and Mirmire starts it with its own emulator choice, downloads, saves, achievements and play time.</td>
 </tr>
 <tr>
-<td><img src="docs/media/arrange.webp" width="360" alt="The consoles wheel: the PlayStation 2 taken and put down elsewhere"><br><b>Your order:</b> put your consoles where you like on a wheel.</td>
-<td><img src="docs/media/add.webp" width="360" alt="Adding the GameCube with the pad, then it lands on the ring"><br><b>Controller first:</b> everything with the pad, from the first launch to adding a console; touch works too.</td>
+<td><img src="docs/mirmire/shelf-psp.webp" width="400" alt="The PSP shelf: games on UMDs"><br><b>More media:</b> PSP games on UMDs, alongside Cartouche's discs and cartridges.</td>
+<td><img src="docs/mirmire/home-recent.webp" width="400" alt="The Recent card, an animated steampunk clock, and the bottom bar with RetroAchievements"><br><b>Mirmire around it:</b> your RetroAchievements, the Mirmire × Cartouche logo, and Widgets, Recent, Favorites, Apps and Settings opening in Mirmire.</td>
 </tr>
 </table>
 
-- **Uses your emulators.** It finds the emulators you installed and starts each game in the right one.
-- **Speaks your language.** English, Français, Deutsch, Español, Italiano, Português (Portugal), Português (Brasil)
-  and 日本語. It follows your device's language, English otherwise; **Language** in the settings picks another.
-- **Light on your device.** On a Snapdragon 8 Gen 2 handheld the games screen holds about 200 MB of graphics
-  memory, a third of what version 0.4.1 took, and the download is 85 MB instead of 110 MB. Left alone, the app stops
-  drawing everything but the background's moving veil, which the settings switch off. The games row costs the
-  same with thousands of games as with a few.
+## How it works with Mirmire
 
-## Consoles
+- **Install and choose it in Mirmire.** Settings › Plugins installs Mirmire Cartouche; Settings › Layout › Big
+  Picture style (or the 3D Big Picture step in Mirmire's setup) makes it Mirmire's Big Picture.
+- **Big Picture opens it.** From Mirmire's Big Picture button, when the handheld is docked, or when Mirmire starts in
+  Big Picture. Exit on its home goes back to Mirmire and leaves Big Picture.
+- **One library.** Mirmire shares its games, art, consoles, button style and theme through a read-only bridge
+  (`kotlin/android/src/main/kotlin/app/cartouche/android/mirmire/`). Mirmire Cartouche scans nothing itself and
+  keeps no library of its own.
+- **Touch and controller.** Swipe along the home and the shelves, tap to open or play, drag a model to turn it; or
+  use the pad as in Cartouche.
 
-Nineteen consoles, each a 3D model of the real one. Twelve are ready to play; the PSP, PS Vita, DS Lite, Switch, Master
-System, Mega Drive and Dreamcast are shown greyed as coming soon until their launch is made.
+## What it changes from Cartouche
 
-| Maker | Consoles |
-|---|---|
-| Nintendo | NES · Super Nintendo · Nintendo 64 · GameCube · Wii · Switch (neon or grey) · Game Boy · Game Boy Color · Game Boy Advance (original or SP) · DS Lite |
-| Sony | PlayStation · PlayStation 2 (slim or fat) · PSP · PS Vita |
-| Sega | Master System · Mega Drive (model 1 or 2) · Dreamcast |
-| Microsoft | Xbox · Xbox 360 |
-
-## Install
-
-Download the APK from this repository's Releases page and install it on your handheld. You need Android 11 or
-later on an arm64 device with Vulkan, and the emulators of the consoles you want to play.
-
-## How a label is found
-
-1. **Which game.** Cartouche reads the file itself (a cartridge's CRC32, a disc's serial) and looks it up in the
-   No-Intro and Redump lists; when the file says nothing, its name decides.
-2. **Which images.** LaunchBox's scans, found by the game's name; ScreenScraper's images, found in a table shipped
-   with the app (`app/data/screenscraper/`), so the device never asks ScreenScraper which game a file is and only
-   downloads images; for PS2 discs, psxdatacenter's scans, by serial.
-3. **Which one first.** An image of the game's region (its country, or the zone containing it: France → Europe):
-   on a cartridge ScreenScraper's, then LaunchBox's; on a disc LaunchBox's, then ScreenScraper's, then
-   psxdatacenter's. Then every other image, closest region first. The first that downloads is kept.
-4. **Yours stays.** A label you chose, or a picture of your own, is never replaced. A game's properties list every
-   image of every source. When ScreenScraper cannot answer, the next image is taken and ScreenScraper is tried again
-   at a later scan.
-
-## Contributing
-
-Ideas, feedback and pull requests are welcome; open an issue to talk about a bigger change first. Help is most
-wanted on:
-
-- **3D models** of the consoles and their discs and cartridges: closer to the real thing, lighter to draw.
-- **A music theme** for the menus.
-- **New consoles** ([docs/adding-a-console.md](docs/adding-a-console.md)).
-- **Translations:** a native reader for Japanese and Portuguese, or a new language
-  ([docs/translating.md](docs/translating.md)).
-- **Integrations** such as RetroAchievements or RomM.
-
-[CONTRIBUTING.md](CONTRIBUTING.md) says how to build, check and send a change; [docs/README.md](docs/README.md)
-maps the code and has one short guide per kind of addition.
+- The 3D home (`app/mirmire/home/`), its models (credited below) and the Mirmire × Cartouche branding.
+- The link to Mirmire: its library, labels and icons copied from Mirmire, games played through it.
+- More consoles: 3DS XL, Atari 2600, Atari Lynx, Neo Geo Pocket and Pocket Color, PS3, Saturn, Steam Deck and Wii U,
+  and styled consoles (Sega CD, PC Engine, 32X, Atari 7800, WonderSwan) for those without a model.
+- The PSP's UMD (`app/carousel/media/psp_umd/`).
+- Consoles and games keep floating while the app rests; tap to play when Mirmire opened the app.
+- Mirmire's colour themes as backgrounds (`tools/mirmire_schemes.py`).
+- Its own name, icon and package (`com.mirmire.cartouche`), so it installs next to Cartouche; Java 21.
 
 ## Building
 
 ```sh
-export JAVA_HOME=/path/to/jdk-17 ANDROID_HOME=/path/to/android-sdk GODOT=/path/to/godot
+export JAVA_HOME=/path/to/jdk-21 ANDROID_HOME=/path/to/android-sdk GODOT=/path/to/godot
 scripts/build.sh                # every check and test, then the debug APK in build/
 scripts/build.sh --install      # the same, then installs and starts it on the connected device
 ```
 
-You need Godot 4.7.2 with its export templates, JDK 17, the Android SDK, Python 3 and gdtoolkit 4; the exact
+You need Godot 4.7.2 with its export templates, JDK 21, the Android SDK, Python 3 and gdtoolkit 4; the exact
 versions are in [CONTRIBUTING.md](CONTRIBUTING.md#build-and-check). Releases are exported with
 Cartouche's own Godot Android template: Godot 4.7.2 plus six small patches, built once with
 `scripts/godot_template.sh build` and cached. Without it the export uses Godot's official template: the same app,
 heavier ([docs/README.md](docs/README.md#the-engine-template)).
 
-## Stack
-
-- **Android only**, from Android 11 (API 30) to Android 16 (API 36), arm64 with Vulkan. On a desktop the Godot
-  project runs on a demo library, to work on the screens without a device.
-- **App:** [Godot](https://godotengine.org) 4.7.2 (GDScript, Mobile renderer).
-- **Domain and Android plugin:** Kotlin 2.1.21 with [Arrow](https://arrow-kt.io) 2.1.2, kotlinx.serialization 1.8.1
-  and kotlinx.coroutines 1.10.2; Gradle 8.11.1, Android Gradle Plugin 8.6.1, JDK 17.
-- **Tests:** [Kotest](https://kotest.io) 5.9.1, [Robolectric](https://robolectric.org) 4.16.1,
-  [GdUnit4](https://github.com/MikeSchulze/gdUnit4) 6.2.1, ktlint.
+Mirmire Cartouche shows the home only when Mirmire opens it; debug builds show it without Mirmire with
+`-- --home=mirmire`.
 
 ## Credits
 
-Cartouche builds on these projects, and thanks their authors.
+Mirmire Cartouche is built on [Cartouche](https://github.com/Hakimba/cartouche) by Hakimba and its contributors.
+Cartouche, and with it Mirmire Cartouche, builds on these projects, and thanks their authors.
 
 | Project | Used for | License |
 |---|---|---|
@@ -213,4 +168,5 @@ public domain as too simple for copyright; they remain trademarks of their owner
 
 ## License
 
-Cartouche is free software under the [GNU GPL v3 or later](LICENSE).
+Mirmire Cartouche, like Cartouche, is free software under the [GNU GPL v3 or later](LICENSE). The 3D models keep
+their own licences, credited above and beside each model.
