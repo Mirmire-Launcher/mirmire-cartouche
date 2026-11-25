@@ -13,9 +13,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Mirmire plays the games of its library when asked (MirmireLink.playIntent); Mirmire declares it. -->
+    <uses-permission android:name="com.mirmire.permission.PLAY_GAMES" />
+
     <!-- Emulators all have a launcher entry, which is all the package visibility Cartouche needs to
          tell whether one is installed. -->
     <queries>
+        <package android:name="com.mirmire" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

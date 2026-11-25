@@ -66,6 +66,22 @@ public enum class Backdrop {
     @SerialName("anthracite")
     ANTHRACITE,
 
+    // Mirmire's colour themes (tools/mirmire_schemes.py).
+    @SerialName("mirmire")
+    MIRMIRE,
+
+    @SerialName("blue_console")
+    BLUE_CONSOLE,
+
+    @SerialName("green_console")
+    GREEN_CONSOLE,
+
+    @SerialName("pearl_console")
+    PEARL_CONSOLE,
+
+    @SerialName("comic")
+    COMIC,
+
     @SerialName("device")
     LIKE_DEVICE,
 }
@@ -120,7 +136,7 @@ public enum class Language {
 
 /**
  * The app's own settings, apart from the library; [preferredRegion], none until the user chooses one, orders labels'
- * images; [gamesFloat] makes the selected game sway and bob (the consoles never do); [soundLevel] is how loud the
+ * images; [gamesFloat], on unless the user turns it off, makes the selected game sway and bob; [soundLevel] is how loud the
  * sounds play, full until the user turns them down; [language], none until the user chooses one, follows the
  * device's; [backdrop] is drawn behind every screen; [pixelVeil] animates a veil of pixels over it, in
  * the backdrop's own colours; [gamesInLine] stands the games of a screen narrower than 16:10 in a straight line, as
@@ -133,7 +149,7 @@ public data class Settings(
     public val buttonStyle: Option<ButtonStyle> = None,
     public val edgeSmoothing: EdgeSmoothing = EdgeSmoothing.FOUR_TIMES,
     public val preferredRegion: Option<PreferredRegion> = None,
-    public val gamesFloat: Boolean = false,
+    public val gamesFloat: Boolean = true,
     public val soundLevel: SoundLevel = SoundLevel.FULL,
     public val language: Option<Language> = None,
     public val backdrop: Backdrop = Backdrop.LIGHT,

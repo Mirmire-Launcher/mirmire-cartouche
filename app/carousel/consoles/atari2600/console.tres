@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "atari2600"
+version = &"cx2600"
+is_default = true
+name = "Atari 2600"
+model_name = "Heavy Sixer"
+scene = "res://carousel/consoles/atari2600/atari2600.tscn"
+triangle_budget = 65000

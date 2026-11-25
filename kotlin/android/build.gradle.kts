@@ -85,7 +85,7 @@ tasks.withType<Test>().configureEach {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
     explicitApi()
     compilerOptions { allWarningsAsErrors = true }
 }

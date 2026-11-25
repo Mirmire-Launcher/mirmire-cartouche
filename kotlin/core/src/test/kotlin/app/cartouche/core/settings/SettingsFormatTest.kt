@@ -32,7 +32,7 @@ class SettingsFormatTest {
         read(""""buttonStyle":"nintendo"""").shouldBeRight(Settings(Some(ButtonStyle.NINTENDO), EdgeSmoothing.FOUR_TIMES))
         read("").shouldBeRight(Settings(None, EdgeSmoothing.FOUR_TIMES))
         read(""""buttonStyle":"xbox","edgeSmoothing":"2x"""")
-            .shouldBeRight(Settings(Some(ButtonStyle.XBOX), EdgeSmoothing.TWICE, None, gamesFloat = false))
+            .shouldBeRight(Settings(Some(ButtonStyle.XBOX), EdgeSmoothing.TWICE, None))
         mapOf(EdgeSmoothing.FOUR_TIMES to "4x", EdgeSmoothing.TWICE to "2x", EdgeSmoothing.OFF to "off").forEach { (smoothing, name) ->
             SettingsFormat.encode(Settings(edgeSmoothing = smoothing)) shouldContain """"edgeSmoothing":"$name""""
         }

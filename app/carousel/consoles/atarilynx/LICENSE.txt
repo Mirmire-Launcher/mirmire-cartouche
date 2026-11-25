@@ -1,0 +1,10 @@
+Model Information:
+* title:	Atari Lynx Mk1
+* source:	https://sketchfab.com/3d-models/atari-lynx-mk1-19163d8c9a464eda85977f245b3e6525
+* author:	Prix Studios (https://sketchfab.com/theprixstudios)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+This work is based on "Atari Lynx Mk1" (https://sketchfab.com/3d-models/atari-lynx-mk1-19163d8c9a464eda85977f245b3e6525) by Prix Studios (https://sketchfab.com/theprixstudios) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

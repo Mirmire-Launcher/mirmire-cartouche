@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://carousel/models/label.gdshader" id="3"]
+[ext_resource type="ArrayMesh" path="res://carousel/media/psp_umd/psp_umd_label.res" id="label_mesh"]
+[ext_resource type="ArrayMesh" path="res://carousel/media/psp_umd/psp_umd_shell.res" id="shell_mesh"]
+[ext_resource type="ArrayMesh" path="res://carousel/media/psp_umd/psp_umd_clear.res" id="clear_mesh"]
+[ext_resource type="ArrayMesh" path="res://carousel/media/psp_umd/psp_umd_disc.res" id="disc_mesh"]
+
+[sub_resource type="ShaderMaterial" id="label_material"]
+shader = ExtResource("3")
+shader_parameter/roughness = 0.35
+shader_parameter/varnish = 0.5
+
+[node name="PspUmd" type="Node3D"]
+
+[node name="Shell" type="MeshInstance3D" parent="."]
+mesh = ExtResource("shell_mesh")
+
+[node name="Disc" type="MeshInstance3D" parent="."]
+mesh = ExtResource("disc_mesh")
+
+[node name="Label" type="MeshInstance3D" parent="."]
+mesh = ExtResource("label_mesh")
+surface_material_override/0 = SubResource("label_material")
+
+[node name="Clear" type="MeshInstance3D" parent="."]
+mesh = ExtResource("clear_mesh")

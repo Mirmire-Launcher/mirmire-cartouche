@@ -2,6 +2,7 @@
 package app.cartouche.android
 
 import android.app.Activity
+import app.cartouche.android.mirmire.MirmireLink
 import android.content.Intent
 import android.graphics.ImageDecoder
 import android.net.ConnectivityManager
@@ -41,6 +42,7 @@ import app.cartouche.core.library.DisplayName
 import app.cartouche.core.library.FolderDepth
 import app.cartouche.core.library.Game
 import app.cartouche.core.library.GameId
+import app.cartouche.core.library.Library
 import app.cartouche.core.library.LibraryFormat
 import app.cartouche.core.library.PlatformSetup
 import app.cartouche.core.platforms.Catalog
@@ -94,6 +96,9 @@ import app.cartouche.core.settings.Settings as AppSettings
  * Getters answer directly; operations answer their request id once through the `answered` signal,
  * and every exception stops at [answer] but the scope's cancellation.
  */
+/** The extra Mirmire opens the shelf with: the background matching its theme. */
+private const val MIRMIRE_BACKDROP = "com.mirmire.extra.BACKDROP"
+
 public class CartouchePlugin internal constructor(godot: Godot, private val threads: Threads) : GodotPlugin(godot) {
     public constructor(godot: Godot) : this(godot, Threads.create())
 
@@ -139,6 +144,12 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
      * too, by [browse] and [titleMarks], for the finders it publishes.
      */
     @Volatile private var shown: Shown = Shown.Users(lazy { libraryIn(context.filesDir) })
+
+    /** Mirmire's library, when Mirmire opened the app ([MirmireLink]): read once, at the first frame's backdrop. */
+    private val mirmire: Option<MirmireLink> by lazy { MirmireLink.read(context, activity?.intent) }
+    /** Whether the shelves show Mirmire's library yet ([useMirmire]). */
+    @Volatile private var mirmireShown = false
+    private val mirmireCopying = java.util.concurrent.atomic.AtomicBoolean(false)
 
     private val library: LibraryService get() = shown.service
 
@@ -209,8 +220,16 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
             }
         val folderNames = DataFolders.parse(DefinitionSource("data_folders.json", dataFolderNames))
         val times = CurtainTimes.parse(DefinitionSource("curtains.json", curtains))
+        // Opened by Mirmire: its consoles this app has no model of show as generic ones, and those the bundled data
+        // does not define get a definition and a profile of their own.
+        val link = mirmire.getOrNull()
+        val modelled = supported.map(::PlatformId).toSet()
+        val synthetic = link?.platforms.orEmpty().filter { it.value.startsWith("mirmire_") }.toSet()
+        val allSources = sources + link?.definitionsFor(synthetic).orEmpty()
+        val allProfiles = link?.profilesWith(profiles, synthetic) ?: profiles
+        link?.let { l -> scope.launch(kotlinx.coroutines.Dispatchers.IO) { l.copyIcons(l.platforms, File(context.filesDir, "mirmire/icons")) } }
         val parsed =
-            Catalog.parse(sources, DefinitionSource("profiles.json", profiles), supported.map(::PlatformId).toSet()).let {
+            Catalog.parse(allSources, DefinitionSource("profiles.json", allProfiles), modelled + link?.platforms.orEmpty()).let {
                 it.copy(rejected = notText + folderNames.swap().getOrNone().toList() + times.swap().getOrNone().toList() + it.rejected)
             }
         val notReady = Coming.of(coming.toList())
@@ -373,6 +392,7 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
         val asked = TimeSource.Monotonic.markNow()
         val since = { asked.elapsedNow().inWholeMilliseconds }
         onLibrary(requestId) {
+            mirmire.onSome(::useMirmire)
             val started = since()
             library.run {
                 val loaded = since()
@@ -387,6 +407,7 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
             }
         }
         art.lookForArt()
+        mirmire.onSome(::copyMirmireArt)
     }
 
     /** Stores the choices for [platformId], as [Sent.PlatformSetup] names them; answers with [Sent.LibraryAnswer]. */
@@ -411,8 +432,113 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
      * The backdrop stored ([Sent.BackdropAnswer]), at once: the app's first frame is drawn on it, without waiting for
      * the library that [settings] reads. Asked once, as the app starts, before any request.
      */
+    /** Whether Mirmire opened the app with its library ([MirmireLink]). */
     @UsedByGodot
-    public fun backdrop(): String = jsonOf(storedSettings.get().sentBackdrop())
+    public fun fromMirmire(): Boolean = mirmire.isSome()
+
+    /**
+     * The home's cards and bar ([MirmireLink.home]) as JSON, Mirmire's library read again so the game to continue and
+     * the trophies are current; `{}` when Mirmire did not open the app.
+     */
+    @UsedByGodot
+    public fun mirmireHome(): String =
+        MirmireLink.read(context, activity?.intent).map { it.home(File(context.filesDir, "mirmire")).toString() }.getOrElse { "{}" }
+
+    /** Opens Mirmire's [screen] (settings, widgets or achievements); leaving it comes back here. */
+    @UsedByGodot
+    public fun openInMirmire(screen: String) {
+        mirmire.onSome { link -> runCatching { context.startActivity(link.openIntent(screen)) } }
+    }
+
+    /** Asks Mirmire to play [gameId] (one of its games) at once, as the home's Continue does. */
+    @UsedByGodot
+    public fun playInMirmire(gameId: String) {
+        mirmire.flatMap { it.playIntent(GameId(gameId)) }.onSome { runCatching { context.startActivity(it) } }
+    }
+
+    /** Goes back to Mirmire, which opened the app: the app's task goes behind, as Home leaves it. */
+    @UsedByGodot
+    public fun backToMirmire() {
+        activity?.let { act -> act.runOnUiThread { act.moveTaskToBack(true) } }
+    }
+
+    @UsedByGodot
+    public fun backdrop(): String {
+        mirmireBackdrop()
+        return jsonOf(storedSettings.get().sentBackdrop())
+    }
+
+    /**
+     * Mirmire opens the shelf with [MIRMIRE_BACKDROP], the background matching its own theme (a `backdrop` setting's
+     * value): stored as if chosen in the settings, once per launch. A value the setting does not take is ignored.
+     */
+    private fun mirmireBackdrop() {
+        val intent = activity?.intent ?: return
+        val fromMirmire = mirmire.getOrNull()?.data?.settings
+        val wanted = buildMap {
+            fromMirmire?.backdrop?.let { put("backdrop", it) }
+            intent.getStringExtra(MIRMIRE_BACKDROP)?.let { put("backdrop", it) }
+            // Mirmire runs the buttons and the sounds: its glyphs and its sound volume.
+            fromMirmire?.buttonStyle?.let { put("button_style", it) }
+            fromMirmire?.soundLevel?.let { put("sound_level", it.coerceIn(0, 10).toString()) }
+        }
+        intent.removeExtra(MIRMIRE_BACKDROP)
+        wanted.forEach { (key, value) ->
+            Setting.change(storedSettings.get(), key, value).fold(
+                { trace("settings") { "Mirmire's $key=$value refused" } },
+                { changed -> storedSettings.set(changed); trace("settings") { "$key=$value, from Mirmire" } },
+            )
+        }
+    }
+
+    /**
+     * Shows Mirmire's library on the shelves, once, kept apart from a library of the app's own (`files/mirmire/`): the
+     * user's console order and choices stay from one opening to the next; the games are Mirmire's of now. Its labels
+     * are Mirmire's art, copied in the background ([copyMirmireArt]); nothing is scraped.
+     */
+    private fun useMirmire(link: MirmireLink) {
+        if (mirmireShown) return
+        mirmireShown = true
+        val folder = File(context.filesDir, "mirmire").apply { mkdirs() }
+        val store = LibraryStore(File(folder, LIBRARY_FILE))
+        val games = link.library().games
+        val kept = store.load().fold({ Library() }) { it.library }
+        store.save(kept.copy(games = games)).onLeft { trace("mirmire") { "library not saved: ${it.message}" } }
+        shown = Shown.Demo(libraryIn(folder))
+        trace("mirmire") { "${games.size} games from Mirmire (${link.data.profile})" }
+    }
+
+    /**
+     * Copies the labels Mirmire has art for and this app has not kept yet, [ART_COPIES] at a time, each told to the
+     * shelves as it lands. Once at a time: the library is asked for again while a copy runs.
+     */
+    private fun copyMirmireArt(link: MirmireLink) {
+        if (!mirmireCopying.compareAndSet(false, true)) return
+        scope.launch(kotlinx.coroutines.Dispatchers.IO) {
+            try {
+                val wanted = link.labels().filter { (game, _) -> art.store.stored(game).isNone() }
+                val done = java.util.concurrent.atomic.AtomicInteger()
+                val queue = java.util.concurrent.ConcurrentLinkedQueue(wanted)
+                kotlinx.coroutines.coroutineScope {
+                    repeat(ART_COPIES) {
+                        launch {
+                            while (true) {
+                                val (game, uri) = queue.poll() ?: break
+                                link.jpeg(uri).onSome { bytes ->
+                                    art.store.save(game, bytes).onRight { stored ->
+                                        emitSignal(ART_SIGNAL, jsonOf(Sent.ArtChange(Sent.ArtProgress(done.incrementAndGet(), wanted.size), Some(Sent.Art(game.value, stored.file.path)))))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                trace("mirmire") { "${done.get()} of ${wanted.size} labels copied from Mirmire" }
+            } finally {
+                mirmireCopying.set(false)
+            }
+        }
+    }
 
     @UsedByGodot
     public fun settings(requestId: Int): Unit = onLibrary(requestId) {
@@ -577,6 +703,8 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
     /** Checks that the game `{"game_id", "disc"?}` can launch as [launchGame] would; starts and stops nothing. */
     @UsedByGodot
     public fun checkLaunch(requestId: Int, request: Dictionary): Unit = onLibrary(requestId) {
+        // Mirmire's games are Mirmire's to start: it checks them when asked.
+        if (request.text("game_id").map { MirmireLink.isMirmire(GameId(it)) }.getOrElse { false }) return@onLibrary Payload.NONE
         val (choice, launch) = libraryLaunch(request)
         launcher.checkGame(launch, choice.file.uri).mapLeft { it.failed }.bind()
         Payload.NONE
@@ -592,6 +720,16 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
         val asked = TimeSource.Monotonic.markNow()
         onLibrary(requestId) {
             val deadline = request.integer("within_ms").flatMap(StartDeadline::ofMillis).getOrElse { raise(invalid("No valid within_ms")) }
+            // A game of Mirmire's: Mirmire plays it (its emulator, download, saves, play time), after the insertion.
+            val mirmireGame = request.text("game_id").map(::GameId).filter(MirmireLink::isMirmire)
+            mirmireGame.onSome { game ->
+                val intent = mirmire.flatMap { it.playIntent(game) }.getOrElse { raise(invalid("Mirmire is not linked")) }
+                trace("launch") { "${game.value} by Mirmire" }
+                onMain {
+                    if (resumed) deadline.startInTime(asked) { launcher.start(act, intent) } else LaunchFailure.TooLate.left()
+                }.mapLeft { it.failed }.bind()
+                return@onLibrary Payload.NONE
+            }
             val (choice, launch) = libraryLaunch(request)
             val emulator = launch.spec.targetPackage
             trace("launch") { "${choice.file.name.value} in ${emulator.fold({ "the app Android picks" }) { it.value }}" }
@@ -755,5 +893,8 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
         const val REQUEST_PICK_PICTURE = 0xCA28
 
         const val LIBRARY_FILE = "library.json"
+
+        /** How many labels are copied from Mirmire at once. */
+        const val ART_COPIES = 4
     }
 }

@@ -22,6 +22,10 @@ signal selection_changed(index: int)
 
 ## How much the console pointed at grows, and how fast (a pop); the one peeled off, how much it grows,
 ## leans (radians, counter-clockwise on the screen) and rises (px).
+## How high the console shown floats while the consoles screen rests, in world units, and how long its float takes to
+## come and go.
+const IDLE_BOB := 0.03
+const _IDLE_EASE_S := 0.6
 const _POINTED_GROWTH := 0.06
 const _POP_S := 0.26
 const _PEEL_GROWTH := 0.08
@@ -61,8 +65,13 @@ var console_scale := 1.0
 var pose_amount := 1.0
 var sway_degrees := CarouselLayout.SWAY_DEGREES
 var bob_height := CarouselLayout.BOB_HEIGHT
-## How fast the consoles float and sway, from 1 down to 0, still ([Resting]).
+## How fast the consoles float and sway. They go on floating while the app rests: not in [constant Resting.PACED], the
+## console shown keeps moving up and down, drawn at the resting frame rate.
 var pace := 1.0
+## How much of its idle float the console shown has, eased towards this from 0 (still) to 1: its rest pose stands it
+## still, as the way into it starts from there, so on the consoles screen alone it rises and falls by [constant IDLE_BOB]
+## on top of it (Mirmire Cartouche). The app starts on the consoles screen.
+var idle_float_target := 1.0
 ## How far the row has come in on screen, from 0 (a point) to 1 (beyond, as it overshoots): every
 ## console grows out of its own centre with it, opaque all along (a fading model would draw with
 ## other shaders, compiled on the spot).
@@ -97,6 +106,7 @@ var _position := 0
 var _scroll := 0.0
 ## How far the consoles' float and sway have gone, in seconds at full pace.
 var _pose_s := 0.0
+var _idle_float := 0.0
 var _stick := Vector2.ZERO
 var _turn := StickTurn.new(true)
 var _ring_places := 0
@@ -124,12 +134,12 @@ func settle() -> void:
 
 
 func _ready() -> void:
-	add_to_group(Resting.PACED)
 	set_process(false)
 
 
 func _process(delta: float) -> void:
 	_pose_s += delta * pace
+	_idle_float = move_toward(_idle_float, idle_float_target, delta / _IDLE_EASE_S)
 	_scroll = CarouselLayout.scrolled(_scroll, _position, delta)
 	_swap_s += delta
 	_turn.follow(_stick, selected_index(), delta)
@@ -357,7 +367,8 @@ func _selected_in_row(index: int, arrived: float) -> Transform3D:
 	pose.sway = sway_degrees
 	var size := console_scale * lerpf(_IN_SCALE, 1.0, arrived) * maxf(arrival, 0.001)
 	var stand := pose.at(_pose_s, pose_amount) * _turn.of(index) * _three_euler(console_rotation).scaled(Vector3.ONE * size)
-	var lift := Vector3.UP * CarouselLayout.float_height(_pose_s, bob_height, pose_amount)
+	var lift := Vector3.UP * (CarouselLayout.float_height(_pose_s, bob_height, pose_amount)
+		+ CarouselLayout.float_height(_pose_s, IDLE_BOB, _idle_float))
 	var slid := Vector3.RIGHT * lerpf(_way * _IN_PX, 0.0, arrived) * _WORLD_PER_PX * (3.7 - console_position.z - global_position.z)
 	if _lights:
 		_lights.place(Transform3D(stand, console_position + lift) * _lit_centre)

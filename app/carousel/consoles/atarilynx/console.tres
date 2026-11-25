@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "mirmire_atarilynx"
+version = &"pag-0201"
+is_default = true
+name = "Lynx"
+model_name = "Lynx I"
+scene = "res://carousel/consoles/atarilynx/atarilynx.tscn"
+triangle_budget = 22000

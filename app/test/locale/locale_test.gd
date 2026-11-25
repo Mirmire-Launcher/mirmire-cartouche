@@ -4,7 +4,7 @@ extends GdUnitTestSuite
 
 const _LOCALE := "res://locale/"
 ## Texts that stay as they are in every language.
-const _UNTRANSLATED := ["Cartouche"]
+const _UNTRANSLATED := ["Mirmire"]
 
 
 func test_every_language_has_every_text_translated_with_its_placeholders() -> void:

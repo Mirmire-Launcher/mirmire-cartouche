@@ -1,0 +1,5 @@
+The UMD (case, clear plastic, disc, label) is cut from "Psp Handheld Console" by Ryan_Nein
+(https://sketchfab.com/Ryan_Nein), https://sketchfab.com/3d-models/psp-handheld-console-db8c125291314639a32de8dfb66b33fa,
+licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/).
+Changes: only the UMD kept, stood up, centred and scaled, its label mapped for each game's picture, the clear plastic made
+more transparent; made by tools/mirmire_umd.gd.

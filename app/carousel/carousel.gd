@@ -156,6 +156,8 @@ var _middle: AndroidServices.Game
 @onready var _clear_hint: Control = %ClearFilter
 @onready var _random_hint: Control = %RandomHint
 @onready var _touch := CarouselTouch.new(_consoles, _row, _rail, _add_ball)
+## Mirmire Cartouche: Mirmire's Big Picture home over the consoles when Mirmire opened the app; null otherwise.
+var _mirmire_home: MirmireHome
 @onready var _toss := GameToss.new()
 @onready var _new_games := NewGames.new()
 @onready var _dots := NewGameDots.new()
@@ -180,6 +182,12 @@ func _ready() -> void:
 	add_child(ControlTokens.new())
 	var started := Time.get_ticks_msec()
 	_screens.android = android
+	# Debug runs show it with `-- --home=mirmire`, without Mirmire's data.
+	if android and (android.from_mirmire() or Diagnostics.argument("home") == "mirmire"):
+		_mirmire_home = MirmireHome.new()
+		_mirmire_home.android = android
+		add_child(_mirmire_home)
+		_mirmire_home.open()
 	_screens.covering.connect(_on_screens_covering)
 	_screens.form_leaving.connect(_on_screens_form_leaving)
 	_screens.model_shown.connect(_show_variant)
@@ -212,7 +220,7 @@ func _ready() -> void:
 	_clock.position = StudioTokens.CLOCK.position
 	_clock.size = StudioTokens.CLOCK.size
 	_resting.smooth_motion = func() -> bool:
-		return _screen == Screen.GAMES and _row.is_visible_in_tree() and _row.games_float and _row.pace > 0.0
+		return _screen == Screen.GAMES and _row.is_visible_in_tree() and _row.games_float and _resting.pace > 0.0
 	_resting.moving = func() -> bool:
 		return _downloading or not _can(CarouselState.Take.REST) or _screens.is_playing() or _order.is_open() \
 			or _properties.is_open() \
@@ -238,6 +246,7 @@ func _ready() -> void:
 	for platform in android.catalog.platforms:
 		_platforms[platform.id] = platform
 	_appearance = Appearance.read(_APPEARANCE)
+	_appearance.add_generic(android.catalog.platforms)
 	var read_ms := Time.get_ticks_msec()
 	_consoles.position.y -= _world_height(_CONSOLES_LOWER_PX, _consoles)
 	_lay_out()
@@ -255,6 +264,15 @@ func _ready() -> void:
 	_touch.long_pressed.connect(_long_press)
 	_touch.lifted.connect(_let_go)
 	_touch.tossed.connect(_toss_selected)
+	# Mirmire Cartouche: a tap on the game plays it, as A does, through every guard A has.
+	_touch.pill = _pill
+	_touch.plays_on_tap = android != null and android.from_mirmire()
+	_touch.launched.connect(func() -> void:
+		for pressed: bool in [true, false]:
+			var press := InputEventAction.new()
+			press.action = &"ui_accept"
+			press.pressed = pressed
+			Input.parse_input_event(press))
 	_row.camera = _camera
 	resized.connect(func() -> void:
 		if _shown and _row.has_games():
@@ -434,6 +452,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _handle_input(event: InputEvent, moved: bool) -> void:
+	# Opened by Mirmire, the launcher: Back on the consoles goes back to it.
+	if _screen == Screen.CONSOLES and event.is_action_pressed(&"screen_back") and android.from_mirmire():
+		get_viewport().set_input_as_handled()
+		# Mirmire Cartouche: back to its home, whose Exit goes back to Mirmire.
+		if _mirmire_home:
+			_mirmire_home.open()
+		else:
+			android.back_to_mirmire()
+		return
 	match CarouselState.command(_screen, _taken(), _facts(moved), event):
 		CarouselState.Command.NONE:
 			return
@@ -819,6 +846,8 @@ func _go(screen_to: Screen) -> void:
 	var games := screen_to == Screen.GAMES and _screen != Screen.PROPERTIES
 	var from := _screen
 	_screen = screen_to
+	# Only the consoles screen floats its console: the way into it starts from it standing still.
+	_consoles.idle_float_target = 1.0 if screen_to == Screen.CONSOLES else 0.0
 	# Arrived, by the animation into or out of the console or straight from another screen; with no console, nothing
 	# stands.
 	if screen_to in [Screen.CONSOLES, Screen.GAMES] and not _shelves.is_empty():

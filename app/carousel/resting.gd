@@ -6,7 +6,7 @@ extends Node
 ## changes, its loop running at the rate of `application/run/low_processor_mode_sleep_usec`, rather
 ## than capping the engine's frame rate, which would keep frames slow for a while after waking. After
 ## [constant STILL_AFTER_S], the motions that go on by themselves (the nodes of the group
-## [constant PACED]: the games' and consoles' float and sway, the welcome's worm)
+## [constant PACED]: the welcome's worm; the games and consoles float on)
 ## slow to a stop in [constant STOPPING_S], and from then on the screen is drawn only when something
 ## on it changes (the clock, the battery). The first press, touch or return to the app wakes
 ## everything at once, and acts as it always does. Animations no press started (a message) play

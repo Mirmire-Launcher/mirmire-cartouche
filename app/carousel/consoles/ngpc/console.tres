@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "mirmire_ngpc"
+version = &"neop10000"
+is_default = true
+name = "Neo Geo Pocket Color"
+model_name = "Pocket Color"
+scene = "res://carousel/consoles/ngpc/ngpc.tscn"
+triangle_budget = 10000

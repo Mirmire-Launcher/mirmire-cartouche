@@ -10,7 +10,7 @@ const _TITLE_SIZE := 26
 ## The satin panel, in the full-size backdrop's pixels, and the line it holds.
 const _PANEL := Rect2(260.0, 690.0, 760.0, 170.0)
 const _PANEL_RADIUS := 34.0
-const _LINE := "Cartouche"
+const _LINE := "Mirmire"
 const _LINE_PX := 17.0
 const _FRAME := Vector2(1280.0, 960.0)
 

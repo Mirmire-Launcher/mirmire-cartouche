@@ -1,0 +1,10 @@
+Model Information:
+* title:	Neo Geo Pocket 3 (3December2020 Day 6)
+* source:	https://sketchfab.com/3d-models/neo-geo-pocket-3-3december2020-day-6-38e1b07ea13f4e5e81901da87221aa6a
+* author:	bicho.salem (https://sketchfab.com/bicho.salem)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+This work is based on "Neo Geo Pocket 3 (3December2020 Day 6)" (https://sketchfab.com/3d-models/neo-geo-pocket-3-3december2020-day-6-38e1b07ea13f4e5e81901da87221aa6a) by bicho.salem (https://sketchfab.com/bicho.salem) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

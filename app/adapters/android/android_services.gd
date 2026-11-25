@@ -127,8 +127,9 @@ func _load_catalog() -> void:
 	var read := Time.get_ticks_usec()
 	# The platforms with a console model, the one source of what a person may add, and the models not ready yet.
 	var supported := PackedStringArray(Appearance.defaults(ConsoleManifest.found()).keys())
-	var coming := PackedStringArray(ConsoleManifest.found().filter(func(model: ConsoleManifest) -> bool:
-		return model.is_coming()).map(ConsoleManifest.folder_of))
+	# Opened by Mirmire, every console with a model shows: Mirmire plays the games, the placeholder animation inserts.
+	var coming := PackedStringArray() if from_mirmire() else PackedStringArray(ConsoleManifest.found().filter(
+		func(model: ConsoleManifest) -> bool: return model.is_coming()).map(ConsoleManifest.folder_of))
 	catalog = CatalogSummary.new(_object(_query(&"loadCatalog",
 		[definitions, profiles, data_folders, curtains, supported, coming])))
 	if Diagnostics.enabled:
@@ -168,6 +169,34 @@ func curtain_allowed() -> bool:
 
 
 ## The backdrop stored, at once: the first frame is drawn on it.
+## Whether Mirmire opened the app with its library: Back on the consoles goes back to Mirmire then.
+func from_mirmire() -> bool:
+	# The plugin's Boolean comes through as "1" or "true", depending on how Godot formats it.
+	return _query(&"fromMirmire", [], "false") in ["1", "true"]
+
+
+## Goes back to Mirmire, which opened the app; it stays open behind, as Home leaves it.
+func back_to_mirmire() -> void:
+	_query(&"backToMirmire", [])
+
+
+## Mirmire's home, for [MirmireHome]: the counts on its cards, the game to continue, the trophies and Mirmire's logo,
+## as [code]mirmireHome[/code] sends them; empty when Mirmire did not open the app.
+func mirmire_home() -> Dictionary:
+	return _object(_query(&"mirmireHome", []))
+
+
+## Opens one of Mirmire's screens over Big Picture: settings, achievements, widgets, all, recent, favorites or apps.
+## Leaving it comes back to the app.
+func open_in_mirmire(screen: String) -> void:
+	_query(&"openInMirmire", [screen])
+
+
+## Asks Mirmire to play [param game_id], one of its games, at once.
+func play_in_mirmire(game_id: String) -> void:
+	_query(&"playInMirmire", [game_id])
+
+
 func backdrop() -> BackdropAnswer:
 	return BackdropAnswer.new(_object(_query(&"backdrop", [])))
 

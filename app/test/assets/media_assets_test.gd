@@ -8,7 +8,7 @@ const Fixtures := preload("res://test/carousel/fixtures.gd")
 const APPEARANCE := "res://data/carousel/appearance.json"
 ## The media a console's platform declares whose folder is still to be made: each folder made takes
 ## its medium off.
-const AWAITING: Array[String] = ["psp_umd", "psvita_card", "nds_card"]
+const AWAITING: Array[String] = ["psvita_card", "nds_card"]
 ## How far a cartridge's label face may be from the proportions of the labels cut for it.
 const LABEL_SHAPE := 0.02
 ## Fronts whose scans are of another shape than their model's front: their crop is not the model's.

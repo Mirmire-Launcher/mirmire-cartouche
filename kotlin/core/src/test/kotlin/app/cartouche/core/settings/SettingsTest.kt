@@ -37,7 +37,7 @@ class SettingsTest {
     fun `a fresh install is on its first launch, smooths the edges 4x, leaves the games still on their arc, is Light with the veil on`() {
         Settings().isFirstLaunch(Library()) shouldBe true
         Settings().edgeSmoothing shouldBe EdgeSmoothing.FOUR_TIMES
-        Settings().gamesFloat shouldBe false
+        Settings().gamesFloat shouldBe true
         Settings().backdrop shouldBe Backdrop.LIGHT
         Settings().pixelVeil shouldBe true
         Settings().gamesInLine shouldBe false

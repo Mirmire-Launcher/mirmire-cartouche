@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "saturn"
+version = &"hst-3200"
+is_default = true
+name = "Saturn"
+model_name = "Model 1"
+scene = "res://carousel/consoles/saturn/saturn.tscn"
+triangle_budget = 215000

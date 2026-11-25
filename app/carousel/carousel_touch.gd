@@ -16,6 +16,14 @@ signal long_pressed
 signal lifted
 ## A flick up from the game in the middle.
 signal tossed
+## Mirmire Cartouche, played by touch: a tap on the game in the middle, or on its title pill (which shows A), plays it.
+signal launched
+
+## The game's title pill, a tap on which plays the game (Mirmire Cartouche); none when unset.
+var pill: Control
+## Whether a tap plays the game (Mirmire Cartouche, opened by Mirmire, played by touch); Cartouche itself launches
+## nothing but by A (INV-20, INV-22).
+var plays_on_tap := false
 
 ## How near the console or the game in the middle a finger comes down to be on it, and how far it swipes to move
 ## one, in pixels.
@@ -72,7 +80,11 @@ func forget() -> void:
 
 
 func _tap(screen: Carousel.Screen, selected: Vector2) -> void:
-	if screen == Carousel.Screen.CONSOLES and _on_selected:
+	if plays_on_tap and screen == Carousel.Screen.GAMES and (_on_selected or (pill != null and pill.is_visible_in_tree()
+			and pill.get_global_rect().has_point(_finger.at))):
+		Diagnostics.trace("touch", "tap on the game: play")
+		launched.emit()
+	elif screen == Carousel.Screen.CONSOLES and _on_selected:
 		Diagnostics.trace("touch", "tap on the console")
 		_add_ball.close(false)
 		entered.emit()

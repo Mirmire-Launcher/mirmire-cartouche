@@ -90,6 +90,30 @@ static func shown_media(manifests: Dictionary[String, MediumManifest]) -> Dictio
 	return shown
 
 
+## The generic console's scene ([GenericConsole]), for a platform without a model of its own.
+const GENERIC_SCENE := "res://carousel/consoles/generic/generic.tscn"
+
+
+## Gives each platform of [param platforms] that has no console model the generic console, showing its icon: the
+## consoles of Mirmire's library this app has no model of (the plugin adds them to the catalog when Mirmire opens it).
+func add_generic(platforms: Array[AndroidServices.Platform]) -> void:
+	for platform in platforms:
+		if platform.id in _consoles:
+			continue
+		var manifest := ConsoleManifest.new()
+		# A folder name of its own, which the logos read (LogoView.GENERIC): no such folder exists.
+		manifest.resource_path = "%s%s%s/%s" % [ConsoleManifest.FOLDERS, LogoView.GENERIC, platform.id, ConsoleManifest.FILE]
+		manifest.platform = platform.id
+		manifest.version = &"generic"
+		manifest.is_default = true
+		manifest.name = platform.name
+		manifest.scene = GENERIC_SCENE
+		manifest.triangle_budget = 2000
+		_bases[platform.id] = manifest
+		_consoles[platform.id] = manifest
+		Diagnostics.trace("appearance", "%s shown as a generic console" % platform.id)
+
+
 ## The console of [param platform_id], as shown unless the user chooses another version; none for a platform without
 ## a console model, which no shelf holds (the core shows only the platforms with one).
 func console_of(platform_id: String) -> ConsoleManifest:

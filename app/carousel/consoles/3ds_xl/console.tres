@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "3ds"
+version = &"spr-001"
+is_default = true
+name = "3DS"
+model_name = "3DS XL"
+scene = "res://carousel/consoles/3ds_xl/3ds_xl.tscn"
+triangle_budget = 10000

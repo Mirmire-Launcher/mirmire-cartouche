@@ -48,6 +48,8 @@ const ROWS: Dictionary[StringName, Dictionary] = {
 	&"sounds": {&"label": "Sounds", &"kind": Kind.LEVEL},
 	&"language": {&"label": "Language", &"kind": Kind.CHOICE_BELOW},
 }
+## Who made the app this one is built from.
+const CREDIT := "Based on Cartouche by Hakimba · GPL v3"
 const _ROW := preload("res://screens/settings_row.tscn")
 
 static var DURATION_S: float:
@@ -373,7 +375,12 @@ func _place_cursor(y: float) -> void:
 
 
 func _draw_card() -> void:
-	StudioText.new(tr("Settings"), StudioTokens.Face.JAKARTA_800, 53.76, -0.04).draw(_ink, _HEADING_INSET, Backdrop.palette.ink)
+	var heading := StudioText.new(tr("Settings"), StudioTokens.Face.JAKARTA_800, 53.76, -0.04)
+	heading.draw(_ink, _HEADING_INSET, Backdrop.palette.ink)
+	# Mirmire Cartouche is Cartouche's work first: its credit beside the heading, on the heading's last line.
+	var room := 629.61 - (_HEADING_INSET.x + heading.width + 24.0)
+	var credit := _fitted(CREDIT, StudioTokens.Face.JAKARTA_500, 19.2, room)
+	credit.draw(_ink, Vector2(629.61 - credit.width, _HEADING_INSET.y + 30.0), Backdrop.palette.mute)
 	var last := mini(_first + _SHOWN, _rows.size()) - 1
 	for i in range(_first, last + 1):
 		var row := _rows[i]

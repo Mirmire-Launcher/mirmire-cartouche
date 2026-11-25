@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "mirmire_ps3"
+version = &"cechg"
+is_default = true
+name = "PlayStation 3"
+model_name = "Original"
+scene = "res://carousel/consoles/ps3/ps3.tscn"
+triangle_budget = 33000

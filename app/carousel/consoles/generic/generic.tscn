@@ -1,0 +1,71 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/generic/generic_console.gd" id="1"]
+[ext_resource type="Resource" path="res://carousel/consoles/generic/generic_shape.tres" id="2"]
+
+[sub_resource type="StandardMaterial3D" id="plastic"]
+albedo_color = Color(0.17, 0.176, 0.2, 1)
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="lid_plastic"]
+albedo_color = Color(0.22, 0.227, 0.255, 1)
+roughness = 0.4
+clearcoat_enabled = true
+clearcoat = 0.3
+
+[sub_resource type="StandardMaterial3D" id="slot_black"]
+albedo_color = Color(0.02, 0.02, 0.025, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="light"]
+albedo_color = Color(0.2, 0.9, 0.45, 1)
+emission_enabled = true
+emission = Color(0.2, 0.9, 0.45, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxMesh" id="body_mesh"]
+material = SubResource("plastic")
+size = Vector3(2.4, 0.5, 1.8)
+
+[sub_resource type="BoxMesh" id="lid_mesh"]
+material = SubResource("lid_plastic")
+size = Vector3(2.24, 0.1, 1.64)
+
+[sub_resource type="BoxMesh" id="slot_mesh"]
+material = SubResource("slot_black")
+size = Vector3(1.1, 0.02, 0.14)
+
+[sub_resource type="BoxMesh" id="light_mesh"]
+material = SubResource("light")
+size = Vector3(0.12, 0.04, 0.02)
+
+[sub_resource type="PlaneMesh" id="icon_mesh"]
+size = Vector2(0.8, 0.8)
+
+[node name="Generic" type="Node3D"]
+script = ExtResource("1")
+shape = ExtResource("2")
+way_in = Vector3(0, 1, 0)
+pose_degrees = Vector3(25, 20, 0)
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="body" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+mesh = SubResource("body_mesh")
+
+[node name="lid" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("lid_mesh")
+
+[node name="slot" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.605, -0.45)
+mesh = SubResource("slot_mesh")
+
+[node name="icon" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.602, 0.25)
+mesh = SubResource("icon_mesh")
+
+[node name="power_light" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 0.3, 0.905)
+mesh = SubResource("light_mesh")

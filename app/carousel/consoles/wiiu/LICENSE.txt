@@ -1,0 +1,10 @@
+Model Information:
+* title:	Nintendo Wii U
+* source:	https://sketchfab.com/3d-models/nintendo-wii-u-2b1d5f3a3c1e4ee59cd40d50ba1e2922
+* author:	joshuagoldenburgh (https://sketchfab.com/joshuagoldenburgh)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+This work is based on "Nintendo Wii U" (https://sketchfab.com/3d-models/nintendo-wii-u-2b1d5f3a3c1e4ee59cd40d50ba1e2922) by joshuagoldenburgh (https://sketchfab.com/joshuagoldenburgh) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

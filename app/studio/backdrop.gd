@@ -12,7 +12,8 @@ extends RefCounted
 ## ([method scheme_of]). The core's `Backdrop` enum and [enum StudioTokens.Scheme] list the same, in this order
 ## (`backdrop_test.gd`).
 const NAMES: Dictionary[StringName, String] = {&"light": "Light", &"dark": "Dark", &"light_grey": "Light grey",
-	&"anthracite": "Anthracite", &"device": "Like the device"}
+	&"anthracite": "Anthracite", &"mirmire": "Mirmire", &"blue_console": "Blue Console", &"green_console": "Green Console",
+	&"pearl_console": "Pearl Console", &"comic": "Comic", &"device": "Like the device"}
 
 ## The backdrop chosen, a key of [constant NAMES].
 static var choice := &"light"

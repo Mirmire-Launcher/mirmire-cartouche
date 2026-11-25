@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ConsoleManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://carousel/consoles/console_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+platform = "mirmire_streaming"
+version = &"1010-stream"
+is_default = true
+name = "Streaming"
+model_name = "Steam Deck"
+scene = "res://carousel/consoles/steam_deck_streaming/steam_deck_streaming.tscn"
+triangle_budget = 48000

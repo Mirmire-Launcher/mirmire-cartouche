@@ -1,0 +1,10 @@
+Model Information:
+* title:	Sony Playstation 3
+* source:	https://sketchfab.com/3d-models/sony-playstation-3-11306cddea7440a6929f3f2c00c38072
+* author:	Vasily (https://sketchfab.com/3D-Models-Geek)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+This work is based on "Sony Playstation 3" (https://sketchfab.com/3d-models/sony-playstation-3-11306cddea7440a6929f3f2c00c38072) by Vasily (https://sketchfab.com/3D-Models-Geek) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

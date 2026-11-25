@@ -25,7 +25,8 @@ var games_in_line := false
 var room_energy := 0.55
 ## How much of its pose and float the selected game has, from 0 (none) to 1.
 var pose_amount := 1.0
-## How fast the selected game floats and sways, from 1 down to 0, still ([Resting]).
+## How fast the selected game floats and sways. It goes on floating while the app rests: not in
+## [constant Resting.PACED], it keeps moving, drawn at the resting frame rate.
 var pace := 1.0
 ## How present the games beside the selected one are, and the selected one itself, from 0 (gone) to
 ## 1 (as the layout fades them).
@@ -96,7 +97,6 @@ func _ready() -> void:
 		if not _games.is_empty():
 			arrange())
 	_fit_width()
-	add_to_group(Resting.PACED)
 	# Nothing moves before a shelf is shown.
 	set_process(false)
 

@@ -1,3 +1,24 @@
+# Mirmire Cartouche
+
+A 3D console shelf for [Mirmire](https://github.com/Mirmire-Launcher), the handheld launcher: your consoles as 3D
+models, your games as discs and cartridges. Mirmire installs and opens it from Settings › Plugins, and can start straight into it.
+
+**Based on [Cartouche](https://github.com/Hakimba/cartouche)** by Hakimba and its contributors, under the GNU GPL
+v3 or later. Mirmire Cartouche is a modified version, released under the same licence ([LICENSE](LICENSE)). What it
+changes:
+
+- Mirmire's colour themes as backgrounds: Mirmire, Blue Console, Green Console, Pearl Console and Comic
+  (`tools/mirmire_schemes.py` generates them in `app/studio/studio_tokens.gd`).
+- Mirmire opens it with the background matching its own theme (the `com.mirmire.extra.BACKDROP` extra).
+- Its own name and package (`com.mirmire.cartouche`), so it installs next to Cartouche; it is not offered as a home
+  screen, Mirmire being the launcher.
+- Builds with Java 21.
+
+The 3D models keep their own licences (CC-BY-4.0 and others), next to each model and credited below. Everything
+from here down is Cartouche's own README.
+
+---
+
 # Cartouche
 
 A game launcher for Android handhelds that shows your games as physical discs and cartridges.
@@ -129,6 +150,19 @@ Cartouche builds on these projects, and thanks their authors.
 
 ### 3D models
 
+Mirmire Cartouche's home menu uses these models (CC-BY-4.0, licence texts in `app/mirmire/home/models/LICENSE.txt`):
+
+- This work is based on "toy desktop computer" (https://sketchfab.com/3d-models/toy-desktop-computer-49dc499a779e404d8aac9ae3ea3b63f1) by EVA-Stud (https://sketchfab.com/EVAStud) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Sony PlayStation 5 DualSense" (https://sketchfab.com/3d-models/sony-playstation-5-dualsense-e62786c6c9514765af059b7d8ca4e648) by Oxicid (https://sketchfab.com/Oxicid) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Nintendo Nostalgia" (https://sketchfab.com/3d-models/nintendo-nostalgia-76080e8d842245c68a185c5c8f879ff2) by LJM (https://sketchfab.com/Ljm.3d) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Broken Steampunk Clock" (https://sketchfab.com/3d-models/broken-steampunk-clock-c440d78639b74e77ba6ae375f9cbf5b7) by VassKacsoHunor (https://sketchfab.com/VassKacsoHunor) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Heart in Love" (https://sketchfab.com/3d-models/heart-in-love-f39ce19b92e246268f4c501b72ea7d0e) by Azamuki (https://sketchfab.com/Azamuki) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "old nokia phone low poly" (https://sketchfab.com/3d-models/old-nokia-phone-low-poly-a022864ae7b642a39469652c3eda2b9a) by KI NG (https://sketchfab.com/dadybandit) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Rusted copper gear" (https://sketchfab.com/3d-models/rusted-copper-gear-75d1f09e810d44dab830c563b77973a2) by Henri Hanot (https://sketchfab.com/henrihanot) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Low-Poly Exit light ceiling sign light" (https://sketchfab.com/3d-models/low-poly-exit-light-ceiling-sign-light-ca3070fa6fa240e6838638cb5c002c51) by Shuckwaffles (https://sketchfab.com/shuckwaffles14) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Robot Playground" (https://sketchfab.com/3d-models/robot-playground-59fc99d8dcb146f3a6c16dbbcc4680da) by Hadrien59 (https://sketchfab.com/Hadrien59) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Psp Handheld Console" (https://sketchfab.com/3d-models/psp-handheld-console-db8c125291314639a32de8dfb66b33fa) by Ryan_Nein (https://sketchfab.com/Ryan_Nein) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/): its UMD, as the PSP's game medium (app/carousel/media/psp_umd/)
+
 The consoles' 3D models are adapted from these downloads (CC-BY-4.0, licence texts beside each model in `app/carousel/consoles/`):
 
 - This work is based on "NES Console and Controller" (https://sketchfab.com/3d-models/nes-console-and-controller-ffd427134d5e44b4850628030aa66236) by Daz (https://sketchfab.com/Darren.Hogan) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
@@ -144,6 +178,14 @@ The consoles' 3D models are adapted from these downloads (CC-BY-4.0, licence tex
 - This work is based on "Sega Genesis Model 2 / Sega Mega Drive" (https://sketchfab.com/3d-models/sega-genesis-model-2-sega-mega-drive-d8feaa413cc847a599e6a484cc4ed2b6) by Zerescas (https://sketchfab.com/zerescas) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 - This work is based on "PS Vita" (https://sketchfab.com/3d-models/ps-vita-d0241d08cee04a169148c275cecc1a5b) by mxiv (https://sketchfab.com/mxiv) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 - This work is based on "Nintendo DS Lite" (https://sketchfab.com/3d-models/nintendo-ds-lite-ca529eb7208746e89b7a28fd2246659d) by Cianon (https://sketchfab.com/Cianon) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- This work is based on "Steam Deck console" (https://sketchfab.com/3d-models/steam-deck-console-46e0c05675a7442dbe73f261436e6819) by wallmasterr (https://sketchfab.com/wallmasterr) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Atari 2600" (https://sketchfab.com/3d-models/atari-2600-2024d933f6214117a399ad4287ede64d) by dark_igorek (https://sketchfab.com/dark_igorek) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Atari Lynx Mk1" (https://sketchfab.com/3d-models/atari-lynx-mk1-19163d8c9a464eda85977f245b3e6525) by Prix Studios (https://sketchfab.com/theprixstudios) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Nintendo 3DS XL" (https://sketchfab.com/3d-models/nintendo-3ds-xl-6cf20040dc0e44559c3e69723945afcc) by Joshua P. (https://sketchfab.com/Pansdaz) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Nintendo Wii U" (https://sketchfab.com/3d-models/nintendo-wii-u-2b1d5f3a3c1e4ee59cd40d50ba1e2922) by joshuagoldenburgh (https://sketchfab.com/joshuagoldenburgh) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Sony Playstation 3" (https://sketchfab.com/3d-models/sony-playstation-3-11306cddea7440a6929f3f2c00c38072) by Vasily (https://sketchfab.com/3D-Models-Geek) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Sega Saturn" (https://sketchfab.com/3d-models/sega-saturn-12050d94b9264056968994a207e127fc) by evansharp (https://sketchfab.com/evansharp) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/) (added for Mirmire)
+- This work is based on "Neo Geo Pocket 3 (3December2020 Day 6)" (https://sketchfab.com/3d-models/neo-geo-pocket-3-3december2020-day-6-38e1b07ea13f4e5e81901da87221aa6a) by bicho.salem (https://sketchfab.com/bicho.salem) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 
 ### Console logos
 
