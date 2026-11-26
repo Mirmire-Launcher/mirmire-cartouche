@@ -186,6 +186,11 @@ func mirmire_home() -> Dictionary:
 	return _object(_query(&"mirmireHome", []))
 
 
+## Whether Mirmire opened the app asking for the night street behind the home, consoles and games.
+func mirmire_night_street() -> bool:
+	return _query(&"mirmireNightStreet", [], "false") in ["1", "true"]
+
+
 ## Closes the app and goes back to Mirmire, leaving Big Picture: the home's Exit. Godot quits at once, while still in
 ## front (in the background its loop is held back): it ends the frame, stops its renderer in order and closes the
 ## window, and Mirmire shows again. The plugin then takes the app out of the recent apps.

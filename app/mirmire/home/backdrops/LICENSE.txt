@@ -1,0 +1,4 @@
+Mirmire Cartouche's night street (app/mirmire/home/backdrops), a backdrop for the 3D home, consoles and games. Changes: lit for night (colours darkened, lamps and pools of light added); otherwise as
+downloaded.
+
+adventure.glb: This work is based on "A Mysterious Adventure - 3D Editor Challenge" (https://sketchfab.com/3d-models/a-mysterious-adventure-3d-editor-challenge-4e2519964d4e42d891314777e4258e28) by Diosmel (https://sketchfab.com/dyvonnet) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

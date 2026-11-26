@@ -98,6 +98,7 @@ import app.cartouche.core.settings.Settings as AppSettings
  */
 /** The extra Mirmire opens the shelf with: the background matching its theme. */
 private const val MIRMIRE_BACKDROP = "com.mirmire.extra.BACKDROP"
+private const val MIRMIRE_NIGHT_STREET = "com.mirmire.extra.NIGHT_STREET"
 
 public class CartouchePlugin internal constructor(godot: Godot, private val threads: Threads) : GodotPlugin(godot) {
     public constructor(godot: Godot) : this(godot, Threads.create())
@@ -458,6 +459,10 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
     @UsedByGodot
     public fun mirmireHome(): String =
         MirmireLink.read(context, activity?.intent).map { it.home(File(context.filesDir, "mirmire")).toString() }.getOrElse { "{}" }
+
+    /** Whether Mirmire opened the app asking for the night street behind the home, consoles and games. */
+    @UsedByGodot
+    public fun mirmireNightStreet(): Boolean = activity?.intent?.getBooleanExtra(MIRMIRE_NIGHT_STREET, false) ?: false
 
     /** Opens Mirmire's [screen] (settings, widgets or achievements); leaving it comes back here. */
     @UsedByGodot

@@ -65,6 +65,17 @@ your finger. The bottom bar has the button hints, the Mirmire × Cartouche logo 
 </tr>
 </table>
 
+## After dark
+
+Some nights, the shelves move to a lamplit street. The camera flies from one corner of it to the next as you move along the home, your consoles and your games, while the trams come and go.
+
+<table>
+<tr>
+<td width="50%"><img src="docs/mirmire/night-home.gif" width="400" alt="The home on a lamplit street at night: the camera flies from Widgets to Continue to Consoles"><br><b>The home:</b> each card has its own corner of the street.</td>
+<td width="50%"><img src="docs/mirmire/night-consoles.gif" width="400" alt="The consoles on the night street: each step flies the camera to another corner"><br><b>Your consoles and games:</b> every step takes you somewhere new.</td>
+</tr>
+</table>
+
 ## In Mirmire
 
 <table>
@@ -156,6 +167,7 @@ Mirmire Cartouche's home menu uses these models (CC-BY-4.0, licence texts in `ap
 - This work is based on "Low-Poly Exit light ceiling sign light" (https://sketchfab.com/3d-models/low-poly-exit-light-ceiling-sign-light-ca3070fa6fa240e6838638cb5c002c51) by Shuckwaffles (https://sketchfab.com/shuckwaffles14) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 - This work is based on "Robot Playground" (https://sketchfab.com/3d-models/robot-playground-59fc99d8dcb146f3a6c16dbbcc4680da) by Hadrien59 (https://sketchfab.com/Hadrien59) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 - This work is based on "Psp Handheld Console" (https://sketchfab.com/3d-models/psp-handheld-console-db8c125291314639a32de8dfb66b33fa) by Ryan_Nein (https://sketchfab.com/Ryan_Nein) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/): its UMD, as the PSP's game medium (app/carousel/media/psp_umd/)
+- This work is based on "A Mysterious Adventure - 3D Editor Challenge" (https://sketchfab.com/3d-models/a-mysterious-adventure-3d-editor-challenge-4e2519964d4e42d891314777e4258e28) by Diosmel (https://sketchfab.com/dyvonnet) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/): the night street behind the home, consoles and games, lit for night (app/mirmire/home/backdrops/)
 
 The consoles' 3D models are adapted from these downloads (CC-BY-4.0, licence texts beside each model in `app/carousel/consoles/`):
 

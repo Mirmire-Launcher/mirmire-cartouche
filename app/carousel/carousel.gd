@@ -158,6 +158,14 @@ var _middle: AndroidServices.Game
 @onready var _touch := CarouselTouch.new(_consoles, _row, _rail, _add_ball)
 ## Mirmire Cartouche: Mirmire's Big Picture home over the consoles when Mirmire opened the app; null otherwise.
 var _mirmire_home: MirmireHome
+## The night street ([NightStreet]) behind the consoles and games, when Mirmire asks for it: a view further at each step
+## of either row; where each row was, to know which way it went.
+var _street: NightStreet
+var _street_game := 0
+var _street_console := 0
+## Where the console and the game chosen stand on screen, as shares of its size: the street's shade goes there.
+const _STREET_SHADE_CONSOLE := Vector2(0.5, 0.38)
+const _STREET_SHADE_GAME := Vector2(0.5, 0.48)
 @onready var _toss := GameToss.new()
 @onready var _new_games := NewGames.new()
 @onready var _dots := NewGameDots.new()
@@ -188,6 +196,16 @@ func _ready() -> void:
 		_mirmire_home.android = android
 		add_child(_mirmire_home)
 		_mirmire_home.open()
+	if NightStreet.wanted(android):
+		_street = NightStreet.make()
+	if _street:
+		_street.stepping = true
+		# Over the backdrop, under the console seen apart and the light.
+		$Backdrop.add_child(_street)
+		$Backdrop.move_child(_street, %Cyclorama.get_index() + 1)
+		var shade := _street.shade_layer()
+		$Backdrop.add_child(shade)
+		$Backdrop.move_child(shade, _street.get_index() + 1)
 	_screens.covering.connect(_on_screens_covering)
 	_screens.form_leaving.connect(_on_screens_form_leaving)
 	_screens.model_shown.connect(_show_variant)
@@ -395,6 +413,19 @@ func _follow_system_theme() -> void:
 
 
 func _process(delta: float) -> void:
+	# The home draws its own street over everything: this one rests meanwhile.
+	if _street:
+		_street.visible = _mirmire_home == null or not _mirmire_home.visible
+		# The soft shade behind the console or game chosen, where each screen has it.
+		match _front():
+			CarouselState.Front.CONSOLES:
+				_street.shade_at = _STREET_SHADE_CONSOLE
+				_street.shade_scale = 1.9
+			CarouselState.Front.GAMES:
+				_street.shade_at = _STREET_SHADE_GAME
+				_street.shade_scale = 1.6
+			_:
+				_street.shade_at = Vector2(-1, -1)
 	# Wherever a medium is drawn in this world (the games, their properties, an insertion), it is lit
 	# by its own room; the consoles by the backdrop's (the scene's resource is shared, and the games change it).
 	var room := _row.room_energy if _front() == CarouselState.Front.GAMES and _row.visible else Backdrop.palette.room_light
@@ -928,6 +959,11 @@ func _on_art_progress(download: AndroidServices.LabelDownload) -> void:
 
 func _on_row_selection_changed(_game: AndroidServices.Game) -> void:
 	_art_focus.start()
+	if _street:
+		var at := _row.selected_position()
+		if at != _street_game:
+			_street.step(signi(at - _street_game))
+		_street_game = at
 	if _screen == Screen.GAMES:
 		_show_title()
 
@@ -947,6 +983,10 @@ func _on_search_opened(open: bool) -> void:
 
 func _on_consoles_selection_changed(index: int) -> void:
 	_rail.go_to(_consoles.target())
+	if _street:
+		if index != _street_console:
+			_street.step(signi(index - _street_console))
+		_street_console = index
 	_shelf = index
 	_use_platform()
 	_row_platform = ""

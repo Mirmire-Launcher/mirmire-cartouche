@@ -115,7 +115,18 @@ func _ready() -> void:
 	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(backdrop)
+	_street = NightStreet.make() if NightStreet.wanted(android) else null
+	if _street:
+		_root.add_child(_street)
+		_halo = Control.new()
+		_halo.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_halo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_halo.draw.connect(_draw_halo)
+		_root.add_child(_halo)
 	_root.add_child(_stage())
+	if _at_night():
+		_root.add_child(_shade(true))
+		_root.add_child(_shade(false))
 	_texts = Control.new()
 	_texts.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_texts.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -234,6 +245,11 @@ func _process(delta: float) -> void:
 		holder.scale = Vector3.ONE * size
 		holder.rotation_degrees.y = sin(_time * 0.7) * _TURN_DEGREES * near - shift * 12.0
 		holder.visible = absf(shift) < 6.0
+	_fly_backdrop()
+	if _halo:
+		_halo.queue_redraw()
+		_texts.queue_redraw()
+		_bar.queue_redraw()
 	# The chosen model turned by a finger, carrying on a little once let go; the others ease back to their pose.
 	if _orbiting:
 		_orbit_idle = 0.0
@@ -669,10 +685,105 @@ func _stage() -> Control:
 	camera.position = Vector3(0, 0.5, 5.0)
 	camera.rotation_degrees.x = -4.0
 	viewport.add_child(camera)
+	_card_camera = camera
+	# Over the night street, a warm light from behind and above catches the models' edges, as its lamps would.
+	if _street:
+		var rim := DirectionalLight3D.new()
+		rim.rotation_degrees = Vector3(-30, 160, 0)
+		rim.light_color = Color(1.0, 0.75, 0.5)
+		rim.light_energy = 1.6
+		viewport.add_child(rim)
 	_row = Node3D.new()
 	_row.position.y = 0.35
 	viewport.add_child(_row)
 	return container
+
+
+## The night street behind the row ([NightStreet]), when Mirmire asks for it; each card has a
+## view of it, and stepping along the row flies its camera from one to the next.
+var _street: NightStreet
+var _card_camera: Camera3D
+var _halo: Control
+
+
+## Over the night scene: a vignette darkening its edges ([param vignette]), or a band darkening its lower part, under the
+## chosen card's name and the bottom bar, so they read over the street.
+static func _shade(vignette: bool) -> TextureRect:
+	var fade := Gradient.new()
+	var texture := GradientTexture2D.new()
+	texture.gradient = fade
+	texture.width = 256
+	texture.height = 256
+	if vignette:
+		fade.set_color(0, Color(0, 0, 0, 0))
+		fade.set_color(1, Color(0, 0, 0, 0.7))
+		fade.set_offset(0, 0.55)
+		texture.fill = GradientTexture2D.FILL_RADIAL
+		texture.fill_from = Vector2(0.5, 0.5)
+		texture.fill_to = Vector2(1.15, 1.15)
+	else:
+		fade.set_color(0, Color(0, 0, 0, 0))
+		fade.set_color(1, Color(0, 0, 0, 0.6))
+		fade.set_offset(0, 0.5)
+		texture.fill_from = Vector2(0.5, 0.0)
+		texture.fill_to = Vector2(0.5, 1.0)
+	var shade := TextureRect.new()
+	shade.texture = texture
+	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	shade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	shade.stretch_mode = TextureRect.STRETCH_SCALE
+	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return shade
+
+
+## Over the night street, a soft shade under the chosen card, so its model stands on a pool of dark rather than on the
+## busy street. It fades in as a card comes to the middle and out as it leaves.
+func _draw_halo() -> void:
+	if _card_camera == null:
+		return
+	for card in _cards:
+		if not card.holder.visible:
+			continue
+		var near := clampf(1.0 - absf(float(_cards.find(card)) - _scroll), 0.0, 1.0)
+		if near > 0.0:
+			NightStreet.draw_shade(_halo, _card_camera.unproject_position(card.holder.global_position), _root.size.y,
+				_time, near)
+
+
+## [param text] drawn at [param at], with a soft dark shadow round it over the night street, breathing with the shade.
+func _draw_text(text: StudioText, canvas: CanvasItem, at: Vector2, color: Color) -> void:
+	if _at_night():
+		var breath := NightStreet.pulse(_time)
+		text.draw(canvas, at + Vector2(0, 3), Color(0, 0, 0, 0), int(lerpf(10.0, 18.0, breath)),
+			Color(0, 0, 0, 0.32 * breath))
+		text.draw(canvas, at + Vector2(0, 2), Color(0, 0, 0, 0.6 * breath), 6, Color(0, 0, 0, 0.5 * breath))
+	text.draw(canvas, at, color)
+
+
+## Whether the night scene is behind the row: its texts and logo drawn light.
+func _at_night() -> bool:
+	return _street != null
+
+
+func _ink() -> Color:
+	return Color(1, 1, 1) if _at_night() else Backdrop.palette.ink
+
+
+func _mute() -> Color:
+	return Color(1, 1, 1, 0.75) if _at_night() else Backdrop.palette.mute
+
+
+## Flies the street's camera to the view of the card at [member _scroll]: between two cards, part way from one's
+## view to the next's.
+func _fly_backdrop() -> void:
+	if _street == null or _cards.is_empty():
+		return
+	var from := clampi(floori(_scroll), 0, _cards.size() - 1)
+	var to := mini(from + 1, _cards.size() - 1)
+	var first: Array = NightStreet.VIEWS[NightStreet.ORDER[0]]
+	var a: Array = NightStreet.VIEWS.get(_cards[from].key, first)
+	var b: Array = NightStreet.VIEWS.get(_cards[to].key, first)
+	_street.look(a, b, _scroll - from)
 
 
 ## The time and the battery, where the carousel has them.
@@ -717,18 +828,18 @@ func _draw_texts() -> void:
 	var middle := _root.size.x / 2.0
 	var title := StudioText.new(card.title, StudioTokens.Face.JAKARTA_800, 48.0, -0.02)
 	var top := _root.size.y * 0.7
-	title.draw(_texts, Vector2(middle - title.width / 2.0, top), Backdrop.palette.ink)
+	_draw_text(title, _texts, Vector2(middle - title.width / 2.0, top), _ink())
 	if card.detail != "":
 		var detail := StudioText.new(card.detail, StudioTokens.Face.JAKARTA_500, 24.0)
 		detail.fit(_root.size.x * 0.6)
-		detail.draw(_texts, Vector2(middle - detail.width / 2.0, top + 66.0), Backdrop.palette.mute)
+		_draw_text(detail, _texts, Vector2(middle - detail.width / 2.0, top + 66.0), _mute())
 
 
 ## Bottom middle, the Mirmire × Cartouche logo, for the backdrop's light or dark; bottom right, the player's
 ## RetroAchievements.
 func _draw_bar() -> void:
 	var bottom := 922.0
-	var dark := Backdrop.palette.ink.get_luminance() > 0.5
+	var dark := _ink().get_luminance() > 0.5
 	var logo: Texture2D = _BAR_ON_DARK if dark else _BAR_ON_LIGHT
 	var tall := _LOGO_PX
 	var wide := tall * logo.get_width() / maxf(1.0, logo.get_height())
@@ -741,7 +852,7 @@ func _draw_bar() -> void:
 	var line := StudioText.of(StudioTokens.Role.HINT, tr("{points} pts · {week} this week").format(
 		{"points": str(ra.get("points", 0)).to_int(), "week": str(ra.get("week_unlocks", 0)).to_int()}))
 	right -= line.width
-	line.draw(_bar, Vector2(right, y + (_AVATAR_PX - 28.0) / 2.0), Backdrop.palette.ink)
+	_draw_text(line, _bar, Vector2(right, y + (_AVATAR_PX - 28.0) / 2.0), _ink())
 	if _avatar:
 		right -= _AVATAR_PX + 10.0
 		_bar.draw_texture_rect(_avatar, Rect2(right, y, _AVATAR_PX, _AVATAR_PX), false)
