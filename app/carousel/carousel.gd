@@ -163,6 +163,8 @@ var _mirmire_home: MirmireHome
 var _street: NightStreet
 var _street_game := 0
 var _street_console := 0
+## Mirmire Cartouche: what Mirmire was last told is chosen, for its second screen.
+var _told_mirmire := "-"
 ## Where the console and the game chosen stand on screen, as shares of its size: the street's shade goes there.
 const _STREET_SHADE_CONSOLE := Vector2(0.5, 0.38)
 const _STREET_SHADE_GAME := Vector2(0.5, 0.48)
@@ -408,11 +410,29 @@ func _follow_3d() -> void:
 	Diagnostics.trace("carousel", "own 3D %s" % ("drawn" if seen else "not drawn: nothing in it shows"))
 
 
+## Mirmire Cartouche: tells Mirmire the console or game chosen, as it changes, so its second screen shows it; nothing
+## while the home shows.
+func _tell_mirmire() -> void:
+	var shown := ""
+	if not _mirmire_home.visible and not _shelves.is_empty():
+		match _front():
+			CarouselState.Front.CONSOLES:
+				shown = "console:" + _shelves[_shelf].platform_id
+			CarouselState.Front.GAMES:
+				if _row.has_games():
+					shown = "game:" + _row.selected_game().id
+	if shown != _told_mirmire:
+		_told_mirmire = shown
+		android.mirmire_selected(shown)
+
+
 func _follow_system_theme() -> void:
 	Diagnostics.trace("backdrop", "system dark=%s: %s" % [Backdrop.system_dark.call(), Backdrop.follow_system()])
 
 
 func _process(delta: float) -> void:
+	if _mirmire_home:
+		_tell_mirmire()
 	# The home draws its own street over everything: this one rests meanwhile.
 	if _street:
 		_street.visible = _mirmire_home == null or not _mirmire_home.visible

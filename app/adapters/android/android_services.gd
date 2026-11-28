@@ -176,6 +176,12 @@ func from_mirmire() -> bool:
 	return _query(&"fromMirmire", [], "false") in ["1", "true"]
 
 
+## Tells Mirmire what is chosen, for its second screen: [code]console:<platform id>[/code],
+## [code]game:<game id>[/code], or empty for nothing.
+func mirmire_selected(shown: String) -> void:
+	_query(&"mirmireSelected", [shown])
+
+
 ## Goes back to Mirmire, which opened the app; it stays open behind, as Home leaves it.
 func back_to_mirmire() -> void:
 	_query(&"backToMirmire", [])

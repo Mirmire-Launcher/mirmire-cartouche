@@ -470,6 +470,14 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
         mirmire.onSome { link -> runCatching { context.startActivity(link.openIntent(screen)) } }
     }
 
+    /** Tells Mirmire the console or game chosen ([MirmireLink.select]), for its second screen; in order, off Godot's thread. */
+    @UsedByGodot
+    public fun mirmireSelected(shown: String) {
+        mirmire.onSome { link -> selecting.execute { link.select(shown) } }
+    }
+
+    private val selecting = java.util.concurrent.Executors.newSingleThreadExecutor()
+
     /** Asks Mirmire to play [gameId] (one of its games) at once, as the home's Continue does. */
     @UsedByGodot
     public fun playInMirmire(gameId: String) {

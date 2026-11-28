@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package app.cartouche.android.mirmire
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -228,6 +229,20 @@ internal class MirmireLink private constructor(private val context: Context, val
     fun openIntent(screen: String): Intent =
         Intent(ACTION_OPEN).setPackage(MIRMIRE_PACKAGE).putExtra(EXTRA_SCREEN, screen).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
+    /**
+     * Tells Mirmire what is chosen, for its second screen: [shown] is `console:<platform id>`, `game:<game id>` or empty
+     * for nothing. A console or game that is not Mirmire's is sent as nothing. Mirmire takes it through its bridge,
+     * which it opened for writing ([SELECTED]); an older Mirmire, which did not, refuses it and nothing changes.
+     */
+    fun select(shown: String) {
+        val values = ContentValues()
+        when {
+            shown.startsWith(CONSOLE) -> systemOf(PlatformId(shown.removePrefix(CONSOLE)))?.let { values.put("system", it.id) }
+            shown.startsWith(GAME) -> mirmireIdOf(GameId(shown.removePrefix(GAME))).onSome { values.put("game", it) }
+        }
+        runCatching { context.contentResolver.update(SELECTED, values, null, null) }
+    }
+
     private fun systemOf(id: PlatformId): MirmireSystem? = data.systems.firstOrNull { platformOf(it.id) == id }
 
     companion object {
@@ -238,6 +253,10 @@ internal class MirmireLink private constructor(private val context: Context, val
         const val ACTION_OPEN = "com.mirmire.action.OPEN"
         const val EXTRA_SCREEN = "com.mirmire.extra.SCREEN"
         private const val ID_PREFIX = "mirmire/"
+        private const val CONSOLE = "console:"
+        private const val GAME = "game:"
+        /** Where Mirmire takes what is chosen ([select]). */
+        private val SELECTED: Uri = Uri.parse("content://com.mirmire.cartouche.bridge/selected")
 
         private val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
 
