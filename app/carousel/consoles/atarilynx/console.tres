@@ -11,3 +11,4 @@ name = "Lynx"
 model_name = "Lynx I"
 scene = "res://carousel/consoles/atarilynx/atarilynx.tscn"
 triangle_budget = 22000
+mirmire_only = true

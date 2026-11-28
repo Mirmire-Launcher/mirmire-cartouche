@@ -11,3 +11,4 @@ name = "Atari 2600"
 model_name = "Heavy Sixer"
 scene = "res://carousel/consoles/atari2600/atari2600.tscn"
 triangle_budget = 65000
+mirmire_only = true

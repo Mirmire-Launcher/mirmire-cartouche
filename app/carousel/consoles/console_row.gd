@@ -25,6 +25,8 @@ signal selection_changed(index: int)
 ## How high the console shown floats while the consoles screen rests, in world units, and how long its float takes to
 ## come and go.
 const IDLE_BOB := 0.03
+## The nodes that go on moving while the app rests, by design (Mirmire Cartouche): the console rows, floating.
+const FLOATS_AT_REST := &"floats_at_rest"
 const _IDLE_EASE_S := 0.6
 const _POINTED_GROWTH := 0.06
 const _POP_S := 0.26
@@ -135,6 +137,7 @@ func settle() -> void:
 
 func _ready() -> void:
 	set_process(false)
+	add_to_group(FLOATS_AT_REST)
 
 
 func _process(delta: float) -> void:

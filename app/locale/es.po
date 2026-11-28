@@ -488,3 +488,12 @@ msgstr "Los juegos se colocan en línea recta en lugar de en arco"
 
 msgid "Your library could not be read. Add your consoles again."
 msgstr "No se pudo leer tu biblioteca. Vuelve a añadir tus consolas."
+
+msgid "Your home page"
+msgstr "Tu página de inicio"
+
+msgid "Back to Mirmire"
+msgstr "Volver a Mirmire"
+
+msgid "{points} pts · {week} this week"
+msgstr "{points} pts · {week} esta semana"

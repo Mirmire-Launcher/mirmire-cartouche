@@ -112,6 +112,9 @@ class FakePlugin extends Object:
 	func artFocus(ids: PackedStringArray) -> void:
 		focus_calls.append(ids)
 
+	func fromMirmire() -> String:
+		return "false"
+
 	func browse(_platform_id: String, _order: String, _typed: String) -> String:
 		return """{"count": 3, "games": [2, 0], "groups": [], "keys": {}}"""
 
@@ -227,7 +230,8 @@ func test_desktop_settings_save_every_choice_with_the_same_success_and_read_them
 	var services: AndroidServices = auto_free(AndroidServices.new())
 	assert_bool(services.is_available()).is_false()
 	assert_bool(FileAccess.file_exists(DesktopPlugin.DEMO)).is_true()
-	assert_bool((await services.settings()).games_float).is_false()
+	# Mirmire Cartouche floats the games unless they are turned still.
+	assert_bool((await services.settings()).games_float).is_true()
 	assert_bool((await services.settings()).has_button_style).is_false()
 	assert_str(services.backdrop().backdrop).is_equal("light")
 	assert_bool(services.backdrop().pixel_veil).is_true()

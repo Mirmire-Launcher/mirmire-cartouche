@@ -11,3 +11,4 @@ name = "3DS"
 model_name = "3DS XL"
 scene = "res://carousel/consoles/3ds_xl/3ds_xl.tscn"
 triangle_budget = 10000
+mirmire_only = true

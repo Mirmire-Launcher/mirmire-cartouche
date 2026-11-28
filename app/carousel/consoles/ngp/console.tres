@@ -11,3 +11,4 @@ name = "Neo Geo Pocket"
 model_name = "Pocket"
 scene = "res://carousel/consoles/ngp/ngp.tscn"
 triangle_budget = 10000
+mirmire_only = true

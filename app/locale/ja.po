@@ -485,3 +485,12 @@ msgstr "ゲームを弧ではなく一直線に並べます"
 
 msgid "Your library could not be read. Add your consoles again."
 msgstr "ライブラリを読み込めませんでした。ゲーム機をもう一度追加してください。"
+
+msgid "Your home page"
+msgstr "ホーム画面"
+
+msgid "Back to Mirmire"
+msgstr "Mirmireに戻る"
+
+msgid "{points} pts · {week} this week"
+msgstr "{points} pt · 今週 {week}"

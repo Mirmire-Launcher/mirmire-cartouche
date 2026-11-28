@@ -89,8 +89,10 @@ class DesktopDemoTest {
         withClue("Out of date: copy $update to app/dev/demo/desktop.json") { found shouldBe expected }
     }
 
+    // Mirmire Cartouche: its consoles for Mirmire's library are shown only when Mirmire opens the app, not in the demo.
     private fun consoleFolders(): List<File> =
         File(app, "carousel/consoles").listFiles { file -> file.resolve("console.tres").exists() }.orEmpty().toList()
+            .filterNot { MIRMIRE_ONLY.containsMatchIn(it.resolve("console.tres").readText()) }
 
     /** The platforms of the console manifests, as the app passes them at catalog load. */
     private fun supportedPlatforms(): Set<PlatformId> = consoleFolders()
@@ -100,6 +102,8 @@ class DesktopDemoTest {
         }.toSet()
 
     private companion object {
+        val MIRMIRE_ONLY = Regex("""^(mirmire_only = true|platform = "mirmire_)""", RegexOption.MULTILINE)
+
         /** Enough games for every shelf of a few of the supported consoles to be an endless row. */
         const val DESKTOP_GAMES = 30
         val LAUNCH = Regex("""^launch = ".+"$""", RegexOption.MULTILINE)

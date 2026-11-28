@@ -14,8 +14,11 @@ const EPSILON := 0.0001
 
 
 func test_inv_14_every_console_folder_holds_a_manifest_the_app_can_show() -> void:
+	# Mirmire Cartouche: its stand-in for consoles without a model (generic/) and its Mirmire-only consoles are no
+	# console folders of Cartouche's.
 	var folders := Array(ResourceLoader.list_directory(ConsoleManifest.FOLDERS)).filter(
-		func(entry: String) -> bool: return entry.ends_with("/"))
+		func(entry: String) -> bool: return entry.ends_with("/") and entry != "generic/" and not (load(
+			ConsoleManifest.FOLDERS.path_join(entry).path_join(ConsoleManifest.FILE)) as ConsoleManifest).is_mirmire_only())
 	var manifests := ConsoleManifest.found()
 	assert_int(manifests.size()).is_equal(folders.size()).is_greater(0)
 	var profiles: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PROFILES))

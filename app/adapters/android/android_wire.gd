@@ -560,7 +560,7 @@ class SettingsAnswer extends Result:
 		edge_smoothing = item.get("edge_smoothing", &"4x")
 		has_preferred_region = item.has("preferred_region")
 		preferred_region = item.get("preferred_region", &"")
-		games_float = item.get("games_float", false)
+		games_float = item.get("games_float", true)
 		sound_level = item.get("sound_level", 10)
 		has_language = item.has("language")
 		language = item.get("language", &"")

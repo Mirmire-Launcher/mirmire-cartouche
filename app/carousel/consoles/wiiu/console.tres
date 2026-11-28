@@ -11,3 +11,4 @@ name = "Wii U"
 model_name = "Wii U"
 scene = "res://carousel/consoles/wiiu/wiiu.tscn"
 triangle_budget = 66000
+mirmire_only = true

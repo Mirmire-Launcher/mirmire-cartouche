@@ -61,7 +61,16 @@ func _still_writers(carousel: Carousel) -> Array[String]:
 	await await_idle_frame()
 	assert_float(carousel._resting.pace).is_equal(0.0)
 	var writers: Array[String] = []
+	# Mirmire Cartouche: the console rows float on at rest by design ([constant ConsoleRow.FLOATS_AT_REST]); held still
+	# while the others are watched.
+	var floating := carousel.find_children("*", "Node", true, false).filter(func(node: Node) -> bool:
+		return node.is_in_group(ConsoleRow.FLOATS_AT_REST) and node.is_processing())
+	for node: Node in floating:
+		node.set_process(false)
+	await _drawn(1)
 	if await _drawn(WATCHED) <= CLOCK_TURNS:
+		for node: Node in floating:
+			node.set_process(true)
 		return writers
 	var processing := ([carousel] + carousel.find_children("*", "Node", true, false)).filter(func(node: Node) -> bool:
 		return node.is_processing())
@@ -72,7 +81,7 @@ func _still_writers(carousel: Carousel) -> Array[String]:
 		if await _drawn(3) > 0:
 			writers.append(str(carousel.get_path_to(node)))
 		node.set_process(false)
-	for node: Node in processing:
+	for node: Node in processing + floating:
 		node.set_process(true)
 	return writers
 

@@ -11,3 +11,4 @@ name = "PlayStation 3"
 model_name = "Original"
 scene = "res://carousel/consoles/ps3/ps3.tscn"
 triangle_budget = 33000
+mirmire_only = true

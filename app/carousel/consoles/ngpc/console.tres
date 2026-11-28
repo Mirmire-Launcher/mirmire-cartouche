@@ -11,3 +11,4 @@ name = "Neo Geo Pocket Color"
 model_name = "Pocket Color"
 scene = "res://carousel/consoles/ngpc/ngpc.tscn"
 triangle_budget = 10000
+mirmire_only = true

@@ -6,6 +6,8 @@ extends Resource
 ## every console by its folder under [constant FOLDERS], so that adding one touches no shared file.
 
 const FOLDERS := "res://carousel/consoles/"
+## The start of the platforms Mirmire's library adds (Mirmire Cartouche only).
+const MIRMIRE_PLATFORMS := "mirmire_"
 const FILE := "console.tres"
 static var _version := RegEx.create_from_string("^[a-z0-9]+(-[a-z0-9]+)*$")
 
@@ -14,6 +16,9 @@ static var _version := RegEx.create_from_string("^[a-z0-9]+(-[a-z0-9]+)*$")
 static var _read: Dictionary[String, ConsoleManifest] = {}
 ## Each platform's colour once found: finding it reads every console's manifest.
 static var _gels: Dictionary[String, Color] = {}
+## Whether Mirmire opened the app (Mirmire Cartouche only): the consoles of Mirmire's own platforms, `mirmire_…`, are
+## listed only then, as those platforms exist only then. The plugin adapter sets it.
+static var with_mirmire := func() -> bool: return false
 
 ## The platform it plays, as `data/platforms/profiles.json` names it; which of its versions it is,
 ## its model code in lower case, hyphens between its words (`dol-001`, `scph-70004`), and whether the
@@ -35,6 +40,9 @@ static var _gels: Dictionary[String, Color] = {}
 @export var ring_size := Vector2.ZERO
 ## Other model folders of this platform, in the order shown after its base model.
 @export var variants := PackedStringArray()
+## A console Mirmire Cartouche added for Mirmire's library, shown only when Mirmire opened the app ([method
+## is_mirmire_only]).
+@export var mirmire_only := false
 
 
 ## The base model and the extra models this console offers, in their display order.
@@ -76,6 +84,8 @@ static func found(folders := FOLDERS) -> Array[ConsoleManifest]:
 		var path := folders.path_join(entry).path_join(FILE)
 		if entry.ends_with("/") and ResourceLoader.exists(path):
 			var manifest: ConsoleManifest = load(path)
+			if manifest.is_mirmire_only() and not with_mirmire.call():
+				continue
 			manifests.append(manifest)
 	return manifests
 
@@ -87,6 +97,12 @@ static func of(folder: String) -> ConsoleManifest:
 		var path := FOLDERS.path_join(folder).path_join(FILE)
 		_read[folder] = load(path) if ResourceLoader.exists(path) else null
 	return _read[folder]
+
+
+## Whether this console is one Mirmire Cartouche added for Mirmire's library, marked so or playing one of Mirmire's own
+## platforms: shown only when Mirmire opened the app.
+func is_mirmire_only() -> bool:
+	return mirmire_only or platform.begins_with(MIRMIRE_PLATFORMS)
 
 
 ## Whether this model is not fully supported yet, without a launch animation of its own: offered greyed, never added

@@ -7,6 +7,7 @@ extends SceneTree
 ## Run once, from a copy inside app/, with the download imported at res://tmp_psp/psp.glb:
 ##   cp tools/mirmire_umd.gd app/umd_tmp.gd && Godot --headless --path app --script res://umd_tmp.gd; rm app/umd_tmp.gd
 ## It writes res://carousel/media/psp_umd/psp_umd_{shell,clear,disc,label}.res and prints the label's place on the front.
+## Then tools/mirmire_close_mesh.gd closes each part, as every shipped medium must be closed.
 
 const SOURCE := "res://tmp_psp/psp.glb"
 const OUT := "res://carousel/media/psp_umd/psp_umd_%s.res"

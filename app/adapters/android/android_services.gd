@@ -89,6 +89,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	ConsoleManifest.with_mirmire = from_mirmire
 	if is_available():
 		_plugin.connect(&"answered", func(text: String) -> void: _answered.emit(_object(text)))
 		_plugin.connect(&"art_changed", func(text: String) -> void: art_changed.emit(ArtChange.new(_object(text))))

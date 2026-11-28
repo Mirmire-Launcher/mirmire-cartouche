@@ -88,7 +88,7 @@
             {
                 "id": "psp",
                 "name": "Sony PSP",
-                "media": "dvd",
+                "media": "cartridge",
                 "medium": "psp_umd"
             },
             {
@@ -983,7 +983,7 @@
     "settings": {
         "first_launch": false,
         "edge_smoothing": "4x",
-        "games_float": false,
+        "games_float": true,
         "sound_level": 10,
         "backdrop": "light",
         "pixel_veil": true,

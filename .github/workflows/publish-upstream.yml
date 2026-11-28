@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# A Cartouche update's pull request (upstream.yml) merged: publishes the next Mirmire Cartouche release, the last
+# release's patch number plus one (v0.6.2 → v0.6.3), by starting release.yml with it. Its branch is deleted.
+name: Publish a Cartouche update
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged && startsWith(github.event.pull_request.head.ref, 'upstream/')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: The next version
+        id: version
+        run: |
+          last=$(git tag -l 'v*' --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          [ -n "$last" ] || { echo "::error::No release tag yet"; exit 1; }
+          IFS=. read -r major minor patch <<< "${last#v}"
+          next="v$major.$minor.$((patch + 1))"
+          echo "Last release $last, next $next"
+          echo "tag=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Publish it
+        # A tag pushed by a workflow starts no other workflow; starting release.yml by hand does.
+        run: gh workflow run release.yml --ref main -f tag="${{ steps.version.outputs.tag }}"
+
+      - name: Delete the branch
+        run: git push origin --delete "${{ github.event.pull_request.head.ref }}" || true

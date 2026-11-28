@@ -11,3 +11,4 @@ name = "Steam"
 model_name = "Steam Deck"
 scene = "res://carousel/consoles/steam_deck/steam_deck.tscn"
 triangle_budget = 48000
+mirmire_only = true

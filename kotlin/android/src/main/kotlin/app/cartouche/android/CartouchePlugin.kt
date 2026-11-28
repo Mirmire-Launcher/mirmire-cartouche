@@ -450,7 +450,7 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
      */
     /** Whether Mirmire opened the app with its library ([MirmireLink]). */
     @UsedByGodot
-    public fun fromMirmire(): Boolean = mirmire.isSome()
+    public fun fromMirmire(): String = mirmire.isSome().toString()
 
     /**
      * The home's cards and bar ([MirmireLink.home]) as JSON, Mirmire's library read again so the game to continue and
@@ -462,7 +462,7 @@ public class CartouchePlugin internal constructor(godot: Godot, private val thre
 
     /** Whether Mirmire opened the app asking for the night street behind the home, consoles and games. */
     @UsedByGodot
-    public fun mirmireNightStreet(): Boolean = activity?.intent?.getBooleanExtra(MIRMIRE_NIGHT_STREET, false) ?: false
+    public fun mirmireNightStreet(): String = (activity?.intent?.getBooleanExtra(MIRMIRE_NIGHT_STREET, false) ?: false).toString()
 
     /** Opens Mirmire's [screen] (settings, widgets or achievements); leaving it comes back here. */
     @UsedByGodot
